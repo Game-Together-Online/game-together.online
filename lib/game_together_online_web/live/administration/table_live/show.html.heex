@@ -1,0 +1,31 @@
+<.header>
+  Table <%= @table.id %>
+  <:subtitle>This is a table record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/administration/tables/#{@table}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit table</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Status"><%= @table.status %></:item>
+</.list>
+
+<.back navigate={~p"/administration/tables"}>Back to tables</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="table-modal"
+  show
+  on_cancel={JS.patch(~p"/administration/tables/#{@table}")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.TableLive.FormComponent}
+    id={@table.id}
+    title={@page_title}
+    action={@live_action}
+    table={@table}
+    navigate={~p"/administration/tables/#{@table}"}
+  />
+</.modal>

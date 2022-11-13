@@ -17,6 +17,17 @@ defmodule GameTogetherOnlineWeb.Router do
   scope "/", GameTogetherOnlineWeb do
     pipe_through :browser
 
+    scope "/administration", Administration do
+      scope "/tables", TableLive do
+        live "/", Index, :index
+        live "/new", Index, :new
+        live "/:id/edit", Index, :edit
+
+        live "/:id", Show, :show
+        live "/:id/show/edit", Show, :edit
+      end
+    end
+
     get "/", PageController, :home
   end
 

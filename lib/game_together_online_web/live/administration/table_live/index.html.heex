@@ -1,0 +1,39 @@
+<.header>
+  Listing Tables
+  <:actions>
+    <.link patch={~p"/administration/tables/new"}>
+      <.button>New Table</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="tables" rows={@tables} row_click={&JS.navigate(~p"/administration/tables/#{&1}")}>
+  <:col :let={table} label="Status"><%= table.status %></:col>
+  <:action :let={table}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/tables/#{table}"}>Show</.link>
+    </div>
+    <.link patch={~p"/administration/tables/#{table}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={table}>
+    <.link phx-click={JS.push("delete", value: %{id: table.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="table-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/tables")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.TableLive.FormComponent}
+    id={@table.id || :new}
+    title={@page_title}
+    action={@live_action}
+    table={@table}
+    navigate={~p"/administration/tables"}
+  />
+</.modal>
