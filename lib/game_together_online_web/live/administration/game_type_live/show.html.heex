@@ -1,0 +1,36 @@
+<.header>
+  Game type <%= @game_type.id %>
+  <:subtitle>This is a game_type record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/administration/game_types/#{@game_type}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Edit game_type</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @game_type.name %></:item>
+  <:item title="Description"><%= @game_type.description %></:item>
+  <:item title="Slug"><%= @game_type.slug %></:item>
+</.list>
+
+<.back navigate={~p"/administration/game_types"}>Back to game_types</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="game_type-modal"
+  show
+  on_cancel={JS.patch(~p"/administration/game_types/#{@game_type}")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.GameTypeLive.FormComponent}
+    id={@game_type.id}
+    title={@page_title}
+    action={@live_action}
+    game_type={@game_type}
+    navigate={~p"/administration/game_types/#{@game_type}"}
+  />
+</.modal>

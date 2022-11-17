@@ -19,8 +19,6 @@ defmodule GameTogetherOnlineWeb.Administration.TableLiveTest do
     test "links back to the administration page", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/administration/tables")
 
-      Phoenix.LiveViewTest
-
       assert index_live
              |> element("a", "Back to administration")
              |> render_click() ==

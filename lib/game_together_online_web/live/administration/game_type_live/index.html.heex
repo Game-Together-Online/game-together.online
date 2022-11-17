@@ -1,0 +1,47 @@
+<.header>
+  Listing Game types
+  <:actions>
+    <.link patch={~p"/administration/game_types/new"}>
+      <.button>New Game type</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="game_types"
+  rows={@game_types}
+  row_click={&JS.navigate(~p"/administration/game_types/#{&1}")}
+>
+  <:col :let={game_type} label="Name"><%= game_type.name %></:col>
+  <:col :let={game_type} label="Description"><%= game_type.description %></:col>
+  <:col :let={game_type} label="Slug"><%= game_type.slug %></:col>
+  <:action :let={game_type}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/game_types/#{game_type}"}>Show</.link>
+    </div>
+    <.link patch={~p"/administration/game_types/#{game_type}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={game_type}>
+    <.link phx-click={JS.push("delete", value: %{id: game_type.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="game_type-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/game_types")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.GameTypeLive.FormComponent}
+    id={@game_type.id || :new}
+    title={@page_title}
+    action={@live_action}
+    game_type={@game_type}
+    navigate={~p"/administration/game_types"}
+  />
+</.modal>
+
+<.back navigate={~p"/administration"}>Back to administration</.back>
