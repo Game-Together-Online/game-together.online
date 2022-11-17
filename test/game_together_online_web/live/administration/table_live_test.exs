@@ -16,6 +16,17 @@ defmodule GameTogetherOnlineWeb.Administration.TableLiveTest do
   describe "Index" do
     setup [:create_table]
 
+    test "links back to the administration page", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/administration/tables")
+
+      Phoenix.LiveViewTest
+
+      assert index_live
+             |> element("a", "Back to administration")
+             |> render_click() ==
+               {:error, {:live_redirect, %{kind: :push, to: ~p"/administration"}}}
+    end
+
     test "lists all tables", %{conn: conn, table: table} do
       {:ok, _index_live, html} = live(conn, ~p"/administration/tables")
 

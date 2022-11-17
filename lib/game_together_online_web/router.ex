@@ -25,6 +25,8 @@ defmodule GameTogetherOnlineWeb.Router do
     end
 
     scope "/administration", Administration do
+      get "/", PageController, :home
+
       scope "/tables", TableLive do
         live "/", Index, :index
         live "/new", Index, :new
