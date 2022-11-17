@@ -17,5 +17,7 @@ defmodule GameTogetherOnline.Administration.GameTypes.GameType do
     game_type
     |> cast(attrs, [:name, :description, :slug])
     |> validate_required([:name, :description, :slug])
+    |> validate_length(:description, max: 255)
+    |> validate_inclusion(:slug, ["spades"])
   end
 end

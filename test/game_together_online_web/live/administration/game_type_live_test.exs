@@ -4,11 +4,11 @@ defmodule GameTogetherOnlineWeb.Administration.GameTypeLiveTest do
   import Phoenix.LiveViewTest
   import GameTogetherOnline.Administration.GameTypesFixtures
 
-  @create_attrs %{description: "some description", name: "some name", slug: "some slug"}
+  @create_attrs %{description: "some description", name: "some name", slug: "spades"}
   @update_attrs %{
     description: "some updated description",
     name: "some updated name",
-    slug: "some updated slug"
+    slug: "spades"
   }
   @invalid_attrs %{description: nil, name: nil, slug: nil}
 

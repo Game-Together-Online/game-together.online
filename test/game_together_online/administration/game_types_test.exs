@@ -21,12 +21,12 @@ defmodule GameTogetherOnline.Administration.GameTypesTest do
     end
 
     test "create_game_type/1 with valid data creates a game_type" do
-      valid_attrs = %{description: "some description", name: "some name", slug: "some slug"}
+      valid_attrs = %{description: "some description", name: "some name", slug: "spades"}
 
       assert {:ok, %GameType{} = game_type} = GameTypes.create_game_type(valid_attrs)
       assert game_type.description == "some description"
       assert game_type.name == "some name"
-      assert game_type.slug == "some slug"
+      assert game_type.slug == "spades"
     end
 
     test "create_game_type/1 with invalid data returns error changeset" do
@@ -39,13 +39,13 @@ defmodule GameTogetherOnline.Administration.GameTypesTest do
       update_attrs = %{
         description: "some updated description",
         name: "some updated name",
-        slug: "some updated slug"
+        slug: "spades"
       }
 
       assert {:ok, %GameType{} = game_type} = GameTypes.update_game_type(game_type, update_attrs)
       assert game_type.description == "some updated description"
       assert game_type.name == "some updated name"
-      assert game_type.slug == "some updated slug"
+      assert game_type.slug == "spades"
     end
 
     test "update_game_type/2 with invalid data returns error changeset" do

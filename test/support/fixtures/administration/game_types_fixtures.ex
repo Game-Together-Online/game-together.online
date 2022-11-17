@@ -13,7 +13,7 @@ defmodule GameTogetherOnline.Administration.GameTypesFixtures do
       |> Enum.into(%{
         description: "some description",
         name: "some name",
-        slug: "some slug"
+        slug: "spades"
       })
       |> GameTogetherOnline.Administration.GameTypes.create_game_type()
 
