@@ -37,7 +37,7 @@ defmodule GameTogetherOnlineWeb.Router do
       end
     end
 
-    get "/", PageController, :home
+    live "/", PageLive.Index, :home
   end
 
   # Other scopes may use custom stacks.
