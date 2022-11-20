@@ -21,6 +21,9 @@ defmodule GameTogetherOnlineWeb.Administration.TableLive.FormComponent do
         phx-submit="save"
       >
         <.input field={{f, :status}} type="text" label="status" />
+
+        <.input type="select" field={{f, :game_type_id}} label="game type" options={@game_types} />
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Table</.button>
         </:actions>

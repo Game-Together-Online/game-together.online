@@ -1,6 +1,7 @@
 defmodule GameTogetherOnline.Administration.TablesTest do
   use GameTogetherOnline.DataCase
 
+  alias GameTogetherOnline.Administration.GameTypesFixtures
   alias GameTogetherOnline.Administration.Tables
 
   describe "tables" do
@@ -12,16 +13,25 @@ defmodule GameTogetherOnline.Administration.TablesTest do
 
     test "list_tables/0 returns all tables" do
       table = table_fixture()
-      assert Tables.list_tables() == [table]
+
+      assert Tables.list_tables()
+             |> Enum.map(&Map.put(&1, :game_type, table.game_type)) == [
+               table
+             ]
     end
 
     test "get_table!/1 returns the table with given id" do
       table = table_fixture()
-      assert Tables.get_table!(table.id) == table
+
+      assert table ==
+               table.id
+               |> Tables.get_table!()
+               |> Map.put(:game_type, table.game_type)
     end
 
     test "create_table/1 with valid data creates a table" do
-      valid_attrs = %{status: "game-in-progress"}
+      game_type = GameTypesFixtures.game_type_fixture()
+      valid_attrs = %{status: "game-in-progress", game_type_id: game_type.id}
 
       assert {:ok, %Table{} = table} = Tables.create_table(valid_attrs)
       assert table.status == "game-in-progress"
@@ -42,7 +52,10 @@ defmodule GameTogetherOnline.Administration.TablesTest do
     test "update_table/2 with invalid data returns error changeset" do
       table = table_fixture()
       assert {:error, %Ecto.Changeset{}} = Tables.update_table(table, @invalid_attrs)
-      assert table == Tables.get_table!(table.id)
+
+      assert table.id
+             |> Tables.get_table!()
+             |> Map.put(:game_type, table.game_type) == table
     end
 
     test "delete_table/1 deletes the table" do

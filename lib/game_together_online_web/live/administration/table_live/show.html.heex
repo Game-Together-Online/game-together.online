@@ -10,6 +10,11 @@
 
 <.list>
   <:item title="Status"><%= @table.status %></:item>
+  <:item title="Game Type">
+    <.link navigate={~p"/administration/game_types/#{@table.game_type.id}"}>
+      <%= @table.game_type.name %>
+    </.link>
+  </:item>
 </.list>
 
 <.back navigate={~p"/administration/tables"}>Back to tables</.back>
@@ -26,6 +31,7 @@
     title={@page_title}
     action={@live_action}
     table={@table}
+    game_types={@game_types}
     navigate={~p"/administration/tables/#{@table}"}
   />
 </.modal>

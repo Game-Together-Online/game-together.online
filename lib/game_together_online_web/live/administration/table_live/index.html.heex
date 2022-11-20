@@ -9,6 +9,11 @@
 
 <.table id="tables" rows={@tables} row_click={&JS.navigate(~p"/administration/tables/#{&1}")}>
   <:col :let={table} label="Status"><%= table.status %></:col>
+  <:col :let={table} label="Game Type">
+    <.link navigate={~p"/administration/game_types/#{table.game_type.id}"}>
+      <%= table.game_type.name %>
+    </.link>
+  </:col>
   <:action :let={table}>
     <div class="sr-only">
       <.link navigate={~p"/administration/tables/#{table}"}>Show</.link>
@@ -34,6 +39,7 @@
     title={@page_title}
     action={@live_action}
     table={@table}
+    game_types={@game_types}
     navigate={~p"/administration/tables"}
   />
 </.modal>
