@@ -18,7 +18,10 @@ defmodule GameTogetherOnline.Administration.Tables do
 
   """
   def list_tables do
-    Repo.all(Table)
+    Table
+    |> Repo.all()
+    # TODO: Test this
+    |> Repo.preload(:game_type)
   end
 
   @doc """
@@ -35,7 +38,12 @@ defmodule GameTogetherOnline.Administration.Tables do
       ** (Ecto.NoResultsError)
 
   """
-  def get_table!(id), do: Repo.get!(Table, id)
+  def get_table!(id),
+    do:
+      Table
+      |> Repo.get!(id)
+      # TODO: Test this
+      |> Repo.preload(:game_type)
 
   @doc """
   Creates a table.

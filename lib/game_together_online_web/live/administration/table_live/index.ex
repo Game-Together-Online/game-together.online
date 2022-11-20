@@ -1,12 +1,16 @@
 defmodule GameTogetherOnlineWeb.Administration.TableLive.Index do
   use GameTogetherOnlineWeb, :live_view
 
+  alias GameTogetherOnline.Administration.GameTypes
   alias GameTogetherOnline.Administration.Tables
   alias GameTogetherOnline.Administration.Tables.Table
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :tables, list_tables())}
+    {:ok,
+     socket
+     |> assign(:tables, list_tables())
+     |> assign(:game_types, list_game_type_options())}
   end
 
   @impl true
@@ -42,5 +46,10 @@ defmodule GameTogetherOnlineWeb.Administration.TableLive.Index do
 
   defp list_tables do
     Tables.list_tables()
+  end
+
+  defp list_game_type_options do
+    GameTypes.list_game_types()
+    |> Enum.map(&{&1.name, &1.id})
   end
 end

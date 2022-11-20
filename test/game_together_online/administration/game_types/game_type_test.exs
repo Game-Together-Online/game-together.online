@@ -2,6 +2,7 @@ defmodule GameTogetherOnline.Administration.GameTypes.GameTypeTest do
   use GameTogetherOnline.DataCase
 
   alias GameTogetherOnline.Administration.GameTypes.GameType
+  alias GameTogetherOnline.Administration.GameTypes
 
   @valid_attrs %{name: "Spades", description: "a game", slug: "spades"}
 
@@ -25,6 +26,11 @@ defmodule GameTogetherOnline.Administration.GameTypes.GameTypeTest do
 
   test "is invalid with an invalid slug" do
     refute GameType.changeset(%GameType{}, Map.put(@valid_attrs, :slug, "invalid-slug")).valid?
+  end
+
+  test "is invalid with a duplicate slug" do
+    {:ok, _game_type} = GameTypes.create_game_type(@valid_attrs)
+    assert {:error, _changeset} = GameTypes.create_game_type(@valid_attrs)
   end
 
   test "is valid with valid attributes" do

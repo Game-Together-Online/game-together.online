@@ -18,8 +18,6 @@ defmodule GameTogetherOnlineWeb.Administration.GameTypeLiveTest do
   end
 
   describe "Index" do
-    setup [:create_game_type]
-
     test "links back to the administration page", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/administration/game_types")
 
@@ -29,7 +27,8 @@ defmodule GameTogetherOnlineWeb.Administration.GameTypeLiveTest do
                {:error, {:live_redirect, %{kind: :push, to: ~p"/administration"}}}
     end
 
-    test "lists all game_types", %{conn: conn, game_type: game_type} do
+    test "lists all game_types", %{conn: conn} do
+      game_type = game_type_fixture()
       {:ok, _index_live, html} = live(conn, ~p"/administration/game_types")
 
       assert html =~ "Listing Game types"
@@ -58,7 +57,8 @@ defmodule GameTogetherOnlineWeb.Administration.GameTypeLiveTest do
       assert html =~ "some description"
     end
 
-    test "updates game_type in listing", %{conn: conn, game_type: game_type} do
+    test "updates game_type in listing", %{conn: conn} do
+      game_type = game_type_fixture()
       {:ok, index_live, _html} = live(conn, ~p"/administration/game_types")
 
       assert index_live |> element("#game_types-#{game_type.id} a", "Edit") |> render_click() =~
@@ -80,7 +80,8 @@ defmodule GameTogetherOnlineWeb.Administration.GameTypeLiveTest do
       assert html =~ "some updated description"
     end
 
-    test "deletes game_type in listing", %{conn: conn, game_type: game_type} do
+    test "deletes game_type in listing", %{conn: conn} do
+      game_type = game_type_fixture()
       {:ok, index_live, _html} = live(conn, ~p"/administration/game_types")
 
       assert index_live |> element("#game_types-#{game_type.id} a", "Delete") |> render_click()
