@@ -1,7 +1,7 @@
-defmodule GameTogetherOnline.Administration.GameTypesFixtures do
+defmodule GameTogetherOnline.GameTypesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `GameTogetherOnline.Administration.GameTypes` context.
+  entities via the `GameTogetherOnline.GameTypes` context.
   """
 
   @doc """
