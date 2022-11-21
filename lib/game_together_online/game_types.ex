@@ -14,4 +14,8 @@ defmodule GameTogetherOnline.GameTypes do
   def list_game_types do
     Repo.all(GameType)
   end
+
+  def get_game_type_by_slug!(slug) do
+    Repo.get_by!(GameType, slug: slug)
+  end
 end

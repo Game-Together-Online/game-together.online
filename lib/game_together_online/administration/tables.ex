@@ -20,7 +20,6 @@ defmodule GameTogetherOnline.Administration.Tables do
   def list_tables do
     Table
     |> Repo.all()
-    # TODO: Test this
     |> Repo.preload(:game_type)
   end
 
@@ -42,7 +41,6 @@ defmodule GameTogetherOnline.Administration.Tables do
     do:
       Table
       |> Repo.get!(id)
-      # TODO: Test this
       |> Repo.preload(:game_type)
 
   @doc """
