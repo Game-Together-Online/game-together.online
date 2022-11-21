@@ -1,8 +1,21 @@
-<ul>
+<ul role="list" class="-my-5 divide-y divide-gray-200">
   <%= for game_type <- @game_types do %>
-    <li>
-      <%= game_type.name %>
-      <%= game_type.description %>
+    <li class="py-5">
+      <div class="relative focus-within:ring-2 focus-within:ring-indigo-500">
+        <h3 class="text-sm font-semibold text-gray-800">
+          <button
+            phx-click="create_table"
+            phx-value-game_type_slug={game_type.slug}
+            class="hover:underline focus:outline-none"
+          >
+            <span class="absolute inset-0" aria-hidden="true"></span>
+            <%= game_type.name %>
+          </button>
+        </h3>
+        <p class="mt-1 text-sm text-gray-600 line-clamp-2">
+          <%= game_type.description %>
+        </p>
+      </div>
     </li>
   <% end %>
 </ul>
