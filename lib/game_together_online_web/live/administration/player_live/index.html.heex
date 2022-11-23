@@ -1,0 +1,41 @@
+<.header>
+  Listing Players
+  <:actions>
+    <.link patch={~p"/administration/players/new"}>
+      <.button>New Player</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="players" rows={@players} row_click={&JS.navigate(~p"/administration/players/#{&1}")}>
+  <:col :let={player} label="Nickname"><%= player.nickname %></:col>
+  <:action :let={player}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/players/#{player}"}>Show</.link>
+    </div>
+    <.link patch={~p"/administration/players/#{player}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={player}>
+    <.link phx-click={JS.push("delete", value: %{id: player.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="player-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/players")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.PlayerLive.FormComponent}
+    id={@player.id || :new}
+    title={@page_title}
+    action={@live_action}
+    player={@player}
+    navigate={~p"/administration/players"}
+  />
+</.modal>
+
+<.back navigate={~p"/administration"}>Back to administration</.back>
