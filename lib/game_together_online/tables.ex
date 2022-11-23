@@ -3,6 +3,12 @@ defmodule GameTogetherOnline.Tables do
   The Tables context.
   """
 
+  alias GameTogetherOnline.Repo
+  alias GameTogetherOnline.Tables.Table
+
+  def get_table!(id),
+    do: Repo.get!(Table, id)
+
   def create_table(game_type, options) do
     table_factory = factory_for_table(game_type)
     table_factory.create_table(options)
