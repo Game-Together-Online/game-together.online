@@ -15,4 +15,5 @@ defmodule GameTogetherOnline.Tables do
   end
 
   defp factory_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades
+  defp factory_for_table(%{slug: "spyfall"}), do: GameTogetherOnline.Spyfall
 end
