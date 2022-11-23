@@ -20,6 +20,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert html =~ "Lobby"
+      assert html =~ "Copy Invite Link"
     end
   end
 end
