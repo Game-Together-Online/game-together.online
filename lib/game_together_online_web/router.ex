@@ -23,8 +23,11 @@ defmodule GameTogetherOnlineWeb.Router do
   scope "/", GameTogetherOnlineWeb do
     pipe_through :browser
 
-    scope "/tables", TableLive do
-      live "/:id/lobby", Index, :lobby
+    live_session :current_player,
+      on_mount: [{GameTogetherOnlineWeb.PlayerLive, :mount_current_player}] do
+      scope "/tables", TableLive do
+        live "/:id/lobby", Index, :lobby
+      end
     end
 
     scope "/administration", Administration do
