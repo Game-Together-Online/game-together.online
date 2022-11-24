@@ -4,6 +4,10 @@ defmodule GameTogetherOnlineWeb.TableLive.Index do
   alias GameTogetherOnlineWeb.TableLive.IndexHTML
   alias GameTogetherOnline.Tables
 
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :current_player, socket.assigns.current_player)}
+  end
+
   def handle_params(%{"id" => id}, url, socket) do
     {:noreply,
      socket
