@@ -3,6 +3,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
   import Phoenix.LiveViewTest
   alias GameTogetherOnline.Administration.TablesFixtures
+  alias GameTogetherOnline.Administration.GameTypesFixtures
   alias Ecto.UUID
 
   describe "Lobby" do
@@ -21,6 +22,21 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
       assert html =~ "Welcome to the lobby Anonymous"
       assert html =~ "Copy Invite Link"
+    end
+
+    test "shows the spades lobby for spades tables", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      assert html =~ "SPADES"
+    end
+
+    test "shows the spyfall lobby for spyfall tables", %{conn: conn} do
+      spyfall_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spyfall"})
+      table = TablesFixtures.table_fixture(%{game_type_id: spyfall_game_type.id})
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      assert html =~ "SPYFALL"
     end
   end
 end
