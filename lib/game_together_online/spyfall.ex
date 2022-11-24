@@ -9,7 +9,6 @@ defmodule GameTogetherOnline.Spyfall do
 
   @game_type_slug "spyfall"
 
-  # TODO: Test this
   def create_table(_options \\ %{}) do
     %Table{}
     |> Table.changeset(%{status: "game-pending", game_type_id: load_game_type_id()})

@@ -7,7 +7,10 @@ defmodule GameTogetherOnline.Tables do
   alias GameTogetherOnline.Tables.Table
 
   def get_table!(id),
-    do: Repo.get!(Table, id)
+    do:
+      Table
+      |> Repo.get!(id)
+      |> Repo.preload(:game_type)
 
   def create_table(game_type, options) do
     table_factory = factory_for_table(game_type)
