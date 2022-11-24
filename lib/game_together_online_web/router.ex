@@ -2,6 +2,7 @@ defmodule GameTogetherOnlineWeb.Router do
   use GameTogetherOnlineWeb, :router
 
   import GameTogetherOnlineWeb.UserAuth
+  import GameTogetherOnlineWeb.Player
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -11,6 +12,8 @@ defmodule GameTogetherOnlineWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :fetch_current_player
+    plug :ensure_current_player_exists
   end
 
   pipeline :api do

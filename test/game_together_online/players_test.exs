@@ -1,59 +1,35 @@
 defmodule GameTogetherOnline.PlayersTest do
   use GameTogetherOnline.DataCase
 
-  alias GameTogetherOnline.Administration.Players
+  alias GameTogetherOnline.Players
+  alias GameTogetherOnline.Players.Player
+  alias GameTogetherOnline.Administration.PlayersFixtures
 
-  describe "players" do
-    alias GameTogetherOnline.Administration.Players.Player
+  test "create_player/1 with valid data creates a role" do
+    valid_attrs = %{nickname: "some nickname"}
 
-    import GameTogetherOnline.Administration.PlayersFixtures
+    assert {:ok, %Player{} = player} = Players.create_player(valid_attrs)
+    assert player.nickname == "some nickname"
+  end
 
-    @invalid_attrs %{nickname: nil}
+  test "create_player/1 with invalid data returns error changeset" do
+    assert {:error, %Ecto.Changeset{}} = Players.create_player(%{})
+  end
 
-    test "list_players/0 returns all players" do
-      player = player_fixture()
-      assert Players.list_players() == [player]
+  describe "get_player_by_session_token/1" do
+    setup do
+      player = PlayersFixtures.player_fixture()
+      token = Players.generate_player_session_token(player)
+      %{player: player, token: token}
     end
 
-    test "get_player!/1 returns the player with given id" do
-      player = player_fixture()
-      assert Players.get_player!(player.id) == player
+    test "returns player by token", %{player: player, token: token} do
+      assert session_player = Players.get_player_by_session_token(token)
+      assert session_player.id == player.id
     end
 
-    test "create_player/1 with valid data creates a player" do
-      valid_attrs = %{nickname: "some nickname"}
-
-      assert {:ok, %Player{} = player} = Players.create_player(valid_attrs)
-      assert player.nickname == "some nickname"
-    end
-
-    test "create_player/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Players.create_player(@invalid_attrs)
-    end
-
-    test "update_player/2 with valid data updates the player" do
-      player = player_fixture()
-      update_attrs = %{nickname: "some updated nickname"}
-
-      assert {:ok, %Player{} = player} = Players.update_player(player, update_attrs)
-      assert player.nickname == "some updated nickname"
-    end
-
-    test "update_player/2 with invalid data returns error changeset" do
-      player = player_fixture()
-      assert {:error, %Ecto.Changeset{}} = Players.update_player(player, @invalid_attrs)
-      assert player == Players.get_player!(player.id)
-    end
-
-    test "delete_player/1 deletes the player" do
-      player = player_fixture()
-      assert {:ok, %Player{}} = Players.delete_player(player)
-      assert_raise Ecto.NoResultsError, fn -> Players.get_player!(player.id) end
-    end
-
-    test "change_player/1 returns a player changeset" do
-      player = player_fixture()
-      assert %Ecto.Changeset{} = Players.change_player(player)
+    test "does not return player for invalid token" do
+      refute Players.get_player_by_session_token("bad token")
     end
   end
 end
