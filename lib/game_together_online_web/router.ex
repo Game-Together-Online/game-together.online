@@ -27,7 +27,7 @@ defmodule GameTogetherOnlineWeb.Router do
       on_mount: [{GameTogetherOnlineWeb.PlayerLive, :mount_current_player}],
       root_layout: {GameTogetherOnlineWeb.Layouts, :full_screen} do
       scope "/tables", TableLive do
-        live "/:id/lobby", Index, :lobby
+        live "/:id/lobby", Index, :lobby, container: {:div, class: "h-full"}
       end
     end
 
