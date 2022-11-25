@@ -20,7 +20,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       table = TablesFixtures.table_fixture()
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
-      assert html =~ "Welcome to the lobby Anonymous"
+      assert html =~ "Welcome to the game,"
       assert html =~ "Copy Invite Link"
     end
 
