@@ -24,7 +24,8 @@ defmodule GameTogetherOnlineWeb.Router do
     pipe_through :browser
 
     live_session :current_player,
-      on_mount: [{GameTogetherOnlineWeb.PlayerLive, :mount_current_player}] do
+      on_mount: [{GameTogetherOnlineWeb.PlayerLive, :mount_current_player}],
+      root_layout: {GameTogetherOnlineWeb.Layouts, :full_screen} do
       scope "/tables", TableLive do
         live "/:id/lobby", Index, :lobby
       end
