@@ -24,9 +24,10 @@ defmodule GameTogetherOnline.GameTypesTest do
       assert loaded_game_type.updated_at == game_type.updated_at
     end
 
-    test "list_game_types/0 returns all game_types" do
-      game_type = game_type_fixture()
-      [loaded_game_type] = GameTypes.list_game_types()
+    test "list_enabled_game_types/0 returns all enabled game_types" do
+      game_type = game_type_fixture(%{enabled: true})
+      game_type_fixture(%{enabled: false, slug: "spyfall"})
+      [loaded_game_type] = GameTypes.list_enabled_game_types()
 
       assert loaded_game_type.id == game_type.id
       assert loaded_game_type.name == game_type.name

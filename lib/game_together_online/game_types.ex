@@ -11,8 +11,10 @@ defmodule GameTogetherOnline.GameTypes do
       [%GameType{}, ...]
 
   """
-  def list_game_types do
-    Repo.all(GameType)
+  def list_enabled_game_types do
+    GameType
+    |> GameType.which_are_enabled()
+    |> Repo.all()
   end
 
   def get_game_type_by_slug!(slug) do
