@@ -7,6 +7,14 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   alias Ecto.UUID
 
   describe "Lobby" do
+    test "shows the edit nickname modal when the edit_nickname query param is present", %{
+      conn: conn
+    } do
+      table = TablesFixtures.table_fixture()
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?edit_nickname")
+      assert html =~ "change-nickname-modal"
+    end
+
     test "raises an error with an invalid table id", %{conn: conn} do
       assert_raise Ecto.Query.CastError, fn -> live(conn, ~p"/tables/table-id/lobby") end
     end
@@ -22,6 +30,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
       assert html =~ "Welcome to the game,"
       assert html =~ "Copy Invite Link"
+      refute html =~ "change-nickname-modal"
     end
 
     test "shows the spades lobby for spades tables", %{conn: conn} do

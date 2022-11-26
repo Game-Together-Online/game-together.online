@@ -4,16 +4,21 @@ defmodule GameTogetherOnlineWeb.TableLive.Index do
   alias GameTogetherOnlineWeb.TableLive.IndexHTML
   alias GameTogetherOnline.Tables
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :current_player, socket.assigns.current_player)}
+  def mount(%{"id" => id}, _session, socket) do
+    {:ok,
+     socket
+     |> assign(:current_player, socket.assigns.current_player)
+     |> assign(table: Tables.get_table!(id))}
   end
 
-  def handle_params(%{"id" => id}, url, socket) do
+  def handle_params(params, url, socket) do
     {:noreply,
      socket
-     |> assign(table: Tables.get_table!(id))
-     |> assign(invite_url: url)}
+     |> assign(invite_url: url)
+     |> assign(show_edit_nickname_modal: show_edit_nickname?(params))}
   end
 
   def render(%{live_action: :lobby} = assigns), do: IndexHTML.lobby(assigns)
+
+  defp show_edit_nickname?(params), do: Map.has_key?(params, "edit_nickname")
 end
