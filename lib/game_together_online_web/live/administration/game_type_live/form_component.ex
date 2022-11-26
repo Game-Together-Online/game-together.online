@@ -23,6 +23,7 @@ defmodule GameTogetherOnlineWeb.Administration.GameTypeLive.FormComponent do
         <.input field={{f, :name}} type="text" label="name" />
         <.input field={{f, :description}} type="text" label="description" />
         <.input field={{f, :slug}} type="text" label="slug" />
+        <.input field={{f, :enabled}} type="checkbox" label="enabled" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Game type</.button>
         </:actions>

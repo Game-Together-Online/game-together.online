@@ -6,7 +6,7 @@ defmodule GameTogetherOnlineWeb.IndexTest do
   import Phoenix.LiveViewTest
 
   test "GET /", %{conn: conn} do
-    game_type = game_type_fixture()
+    game_type = game_type_fixture(%{enabled: true})
     conn = get(conn, ~p"/")
 
     response = html_response(conn, 200)
@@ -17,7 +17,7 @@ defmodule GameTogetherOnlineWeb.IndexTest do
 
   describe "creating a spades game" do
     setup %{conn: conn} do
-      game_type_fixture(%{slug: "spades", name: "Spades", description: "spades!"})
+      game_type_fixture(%{slug: "spades", name: "Spades", description: "spades!", enabled: true})
       {:ok, view, _html} = live(conn, ~p"/")
 
       result =

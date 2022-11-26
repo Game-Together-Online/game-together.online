@@ -8,6 +8,7 @@ defmodule GameTogetherOnline.Administration.GameTypes.GameType do
     field :description, :string
     field :name, :string
     field :slug, :string
+    field :enabled, :boolean
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule GameTogetherOnline.Administration.GameTypes.GameType do
   @doc false
   def changeset(game_type, attrs) do
     game_type
-    |> cast(attrs, [:name, :description, :slug])
+    |> cast(attrs, [:name, :description, :slug, :enabled])
     |> validate_required([:name, :description, :slug])
     |> validate_length(:description, max: 255)
     |> validate_inclusion(:slug, ["spades", "spyfall"])

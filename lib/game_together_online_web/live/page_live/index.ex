@@ -19,6 +19,6 @@ defmodule GameTogetherOnlineWeb.PageLive.Index do
   end
 
   defp list_game_types() do
-    GameTypes.list_game_types()
+    GameTypes.list_enabled_game_types()
   end
 end
