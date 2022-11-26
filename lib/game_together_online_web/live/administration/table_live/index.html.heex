@@ -15,6 +15,9 @@
     </.link>
   </:col>
   <:action :let={table}>
+    <.link patch={~p"/tables/#{table}/lobby"}>Public Lobby</.link>
+  </:action>
+  <:action :let={table}>
     <div class="sr-only">
       <.link navigate={~p"/administration/tables/#{table}"}>Show</.link>
     </div>
