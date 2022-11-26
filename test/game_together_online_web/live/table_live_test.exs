@@ -47,5 +47,27 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
       assert html =~ "SPYFALL"
     end
+
+    test "allows players to update their nickname", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      assert index_live |> element("a", "Change Your Nickname") |> render_click() =~
+               "Save"
+
+      assert_patch(index_live, ~p"/tables/#{table.id}/lobby?edit_nickname")
+
+      assert index_live
+             |> form("#change-nickname-form", player: %{nickname: ""})
+             |> render_change() =~ "can&#39;t be blank"
+
+      {:ok, _, html} =
+        index_live
+        |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
+        |> render_submit()
+        |> follow_redirect(conn, ~p"/tables/#{table.id}/lobby")
+
+      assert html =~ "Nickname updated successfully"
+    end
   end
 end

@@ -10,6 +10,16 @@ defmodule GameTogetherOnline.Players do
     |> Repo.insert()
   end
 
+  def update_player(player, attrs) do
+    player
+    |> Player.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def change_player(%Player{} = player, attrs \\ %{}) do
+    Player.changeset(player, attrs)
+  end
+
   def get_player_by_session_token(token) do
     {:ok, query} = PlayerToken.verify_session_token_query(token)
     Repo.one(query)

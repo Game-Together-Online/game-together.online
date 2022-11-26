@@ -90,8 +90,8 @@
 >
   <.live_component
     module={GameTogetherOnlineWeb.TableLive.ChangeNicknameComponent}
-    id={@table.id}
-    table={@table}
+    id={@current_player.id}
+    player={@current_player}
     navigate={~p"/tables/#{@table.id}/lobby"}
   />
 </.modal>
