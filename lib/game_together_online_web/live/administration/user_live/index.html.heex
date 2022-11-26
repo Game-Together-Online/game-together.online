@@ -1,0 +1,10 @@
+<.header>
+  Listing Users
+</.header>
+
+<.table id="users" rows={@users} row_click={&JS.navigate(~p"/administration/users/#{&1}")}>
+  <:col :let={user} label="Email"><%= user.email %></:col>
+  <:col :let={user} label="Confirmed at"><%= user.confirmed_at %></:col>
+</.table>
+
+<.back navigate={~p"/administration"}>Back to administration</.back>

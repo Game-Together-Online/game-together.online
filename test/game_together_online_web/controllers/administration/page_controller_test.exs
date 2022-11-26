@@ -8,5 +8,7 @@ defmodule GameTogetherOnlineWeb.Administration.PageControllerTest do
     assert html_response(conn, 200) =~ ~p"/administration/game_types"
 
     assert html_response(conn, 200) =~ ~p"/administration/players"
+
+    assert html_response(conn, 200) =~ ~p"/administration/users"
   end
 end

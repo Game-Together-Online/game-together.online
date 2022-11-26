@@ -1,0 +1,11 @@
+<.header>
+  User <%= @user.id %>
+  <:subtitle>This is a user record from your database.</:subtitle>
+</.header>
+
+<.list>
+  <:item title="Email"><%= @user.email %></:item>
+  <:item title="Confirmed at"><%= @user.confirmed_at %></:item>
+</.list>
+
+<.back navigate={~p"/administration/users"}>Back to users</.back>
