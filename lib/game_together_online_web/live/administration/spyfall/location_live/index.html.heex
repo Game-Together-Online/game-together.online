@@ -1,0 +1,45 @@
+<.header>
+  Listing Spyfall Locations
+  <:actions>
+    <.link patch={~p"/administration/spyfall/locations/new"}>
+      <.button>New Location</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="locations"
+  rows={@locations}
+  row_click={&JS.navigate(~p"/administration/spyfall/locations/#{&1}")}
+>
+  <:col :let={location} label="Name"><%= location.name %></:col>
+  <:action :let={location}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/spyfall/locations/#{location}"}>Show</.link>
+    </div>
+    <.link patch={~p"/administration/spyfall/locations/#{location}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={location}>
+    <.link phx-click={JS.push("delete", value: %{id: location.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="location-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/spyfall/locations")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.Spyfall.LocationLive.FormComponent}
+    id={@location.id || :new}
+    title={@page_title}
+    action={@live_action}
+    location={@location}
+    navigate={~p"/administration/spyfall/locations"}
+  />
+</.modal>
+
+<.back navigate={~p"/administration"}>Back to administration</.back>
