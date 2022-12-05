@@ -8,6 +8,7 @@
   <:item title="Confirmed at"><%= @user.confirmed_at %></:item>
   <:item title="Player">
     <.live_component
+      user={@user}
       module={GameTogetherOnlineWeb.Administration.UserLive.PlayerFormComponent}
       id="player-form"
     />
