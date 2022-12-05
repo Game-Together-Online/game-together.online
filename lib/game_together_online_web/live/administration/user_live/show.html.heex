@@ -6,6 +6,12 @@
 <.list>
   <:item title="Email"><%= @user.email %></:item>
   <:item title="Confirmed at"><%= @user.confirmed_at %></:item>
+  <:item title="Player">
+    <.live_component
+      module={GameTogetherOnlineWeb.Administration.UserLive.PlayerFormComponent}
+      id="player-form"
+    />
+  </:item>
 </.list>
 
 <.back navigate={~p"/administration/users"}>Back to users</.back>

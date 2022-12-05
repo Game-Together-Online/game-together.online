@@ -1,39 +1,118 @@
-defmodule GameTogetherOnline.Administration.Users do
+defmodule GameTogetherOnline.Administration.Players do
   @moduledoc """
-  The Users context.
+  The Players context.
   """
 
   import Ecto.Query, warn: false
   alias GameTogetherOnline.Repo
 
-  alias GameTogetherOnline.Administration.Users.User
+  alias GameTogetherOnline.Administration.Players.Player
 
   @doc """
-  Returns the list of users.
+  Returns the list of players.
 
   ## Examples
 
-      iex> list_users()
-      [%User{}, ...]
+      iex> list_players()
+      [%Player{}, ...]
 
   """
-  def list_users do
-    Repo.all(User)
+  def list_players do
+    Repo.all(Player)
+  end
+
+  def list_players_without_users_by_nickname(nickname, opts \\ []) do
+    player_filter = "%" <> nickname <> "%"
+    page_size = Keyword.get(opts, :page_size, 10)
+
+    Repo.all(
+      from p in Player,
+        left_join: u in assoc(p, :user),
+        where: ilike(p.nickname, ^player_filter),
+        where: is_nil(u.id),
+        limit: ^page_size,
+        order_by: [asc: p.nickname]
+    )
   end
 
   @doc """
-  Gets a single user.
+  Gets a single player.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Raises `Ecto.NoResultsError` if the Player does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
+      iex> get_player!(123)
+      %Player{}
 
-      iex> get_user!(456)
+      iex> get_player!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_player!(id), do: Repo.get!(Player, id)
+
+  @doc """
+  Creates a player.
+
+  ## Examples
+
+      iex> create_player(%{field: value})
+      {:ok, %Player{}}
+
+      iex> create_player(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_player(attrs \\ %{}) do
+    %Player{}
+    |> Player.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a player.
+
+  ## Examples
+
+      iex> update_player(player, %{field: new_value})
+      {:ok, %Player{}}
+
+      iex> update_player(player, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_player(%Player{} = player, attrs) do
+    player
+    |> Player.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a player.
+
+  ## Examples
+
+      iex> delete_player(player)
+      {:ok, %Player{}}
+
+      iex> delete_player(player)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_player(%Player{} = player) do
+    Repo.delete(player)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking player changes.
+
+  ## Examples
+
+      iex> change_player(player)
+      %Ecto.Changeset{data: %Player{}}
+
+  """
+  def change_player(%Player{} = player, attrs \\ %{}) do
+    Player.changeset(player, attrs)
+  end
 end

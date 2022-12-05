@@ -7,6 +7,8 @@ defmodule GameTogetherOnline.Administration.Users.User do
     field :email, :string
     field :confirmed_at, :naive_datetime
 
+    has_one :player, GameTogetherOnline.Administration.Players.Player
+
     timestamps()
   end
 end

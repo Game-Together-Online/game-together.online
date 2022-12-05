@@ -3,6 +3,7 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
 
   import Phoenix.LiveViewTest
   import GameTogetherOnline.Administration.PlayersFixtures
+  import GameTogetherOnline.AccountsFixtures
 
   @create_attrs %{nickname: "some nickname"}
   @update_attrs %{nickname: "some updated nickname"}
@@ -15,6 +16,11 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
 
   describe "Index" do
     setup [:create_player]
+
+    test "shows an empty state when there is no user for the player", %{conn: conn} do
+      {:ok, _index_live, html} = live(conn, ~p"/administration/players")
+      assert html =~ "No user"
+    end
 
     test "lists all players", %{conn: conn, player: player} do
       {:ok, _index_live, html} = live(conn, ~p"/administration/players")
@@ -105,6 +111,72 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
 
       assert html =~ "Player updated successfully"
       assert html =~ "some updated nickname"
+    end
+
+    test "shows an empty state when there is no user for the player", %{
+      conn: conn,
+      player: player
+    } do
+      user_fixture(%{email: "first-email@something.org"})
+      {:ok, _show_live, html} = live(conn, ~p"/administration/players/#{player}")
+      assert html =~ "Associate a user"
+    end
+
+    test "when there is no player for the user it initially lists players who have not been assigned to a user",
+         %{conn: conn} do
+      user = user_fixture(%{email: "first-email@something.org"})
+      second_user = user_fixture(%{email: "second-email@something.org"})
+      player = player_fixture(%{user: user, nickname: "Player 1", user_id: user.id})
+
+      {:ok, _show_live, html} = live(conn, ~p"/administration/players/#{player}")
+
+      assert html =~ second_user.email
+      refute html =~ user.email
+    end
+
+    test "when there is no player for the user it initially shows an empty state when there are no players which have not been assigned to a user",
+         %{conn: conn} do
+      user = user_fixture(%{email: "first-email@something.org"})
+      player = player_fixture(%{user: user, nickname: "Player 1", user_id: user.id})
+
+      {:ok, _show_live, html} = live(conn, ~p"/administration/players/#{player}")
+
+      refute html =~ user.email
+      assert html =~ "OOPS! No users found."
+    end
+
+    test "when there is no player for the user it filters players by nickname", %{conn: conn} do
+      player = player_fixture()
+
+      user_fixture(%{email: "first-email@something.org"})
+      user_fixture(%{email: "second-email@something.org"})
+      user_fixture(%{email: "missing@something.org"})
+
+      {:ok, _live, html} = live(conn, ~p"/administration/players/#{player}")
+
+      assert html =~ "first-email"
+      assert html =~ "second-email"
+      assert html =~ "missing"
+    end
+
+    test "when there is no player for the user it shows an empty state when there are no players which match the filter",
+         %{conn: conn} do
+      player = player_fixture()
+      user_fixture(%{email: "first-email@something.org"})
+      user_fixture(%{email: "second-email@something.org"})
+      user_fixture(%{email: "missing@something.org"})
+
+      {:ok, live, _html} = live(conn, ~p"/administration/players/#{player}")
+
+      html =
+        live
+        |> form("#user-email-form", user: %{email: "Z"})
+        |> render_change()
+
+      refute html =~ "first-email"
+      refute html =~ "second-email"
+      refute html =~ "missing"
+      assert html =~ "No users without a player were found with an email that matches"
     end
   end
 end
