@@ -2,6 +2,7 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent do
   use GameTogetherOnlineWeb, :live_component
 
   alias GameTogetherOnline.Administration.Users
+  alias GameTogetherOnline.Administration.Players
 
   @impl true
   def mount(socket) do
@@ -117,7 +118,11 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent do
      |> assign(:email_filter, email)}
   end
 
-  def handle_event("associate_user", %{"user_id" => _user_id}, socket) do
+  # TODO: Test this
+  def handle_event("associate_user", %{"user_id" => user_id}, socket) do
+    %{player: player} = socket.assigns
+    {:ok, _player} = Players.update_player(player, %{user_id: user_id})
+
     {:noreply, socket}
   end
 

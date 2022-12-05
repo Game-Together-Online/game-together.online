@@ -121,7 +121,14 @@ defmodule GameTogetherOnlineWeb.Administration.UserLive.PlayerFormComponent do
      |> assign(:nickname_filter, nickname)}
   end
 
-  def handle_event("associate_player", %{"player_id" => _player_id}, socket) do
+  def handle_event("associate_player", %{"player_id" => player_id}, socket) do
+    %{user: user} = socket.assign
+
+    {:ok, _player} =
+      player_id
+      |> Players.get_player!()
+      |> Players.update_player(%{user_id: user.id})
+
     {:noreply, socket}
   end
 
