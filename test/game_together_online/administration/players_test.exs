@@ -1,6 +1,7 @@
 defmodule GameTogetherOnline.Administration.PlayersTest do
   use GameTogetherOnline.DataCase
 
+  import GameTogetherOnline.AccountsFixtures
   alias GameTogetherOnline.Administration.Players
 
   describe "players" do
@@ -9,6 +10,40 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
     import GameTogetherOnline.Administration.PlayersFixtures
 
     @invalid_attrs %{nickname: nil}
+
+    test "list_players_without_users_by_nickname/1 returns all with a similar nickname" do
+      player_fixture(%{nickname: "some-nickname"})
+      player = player_fixture(%{nickname: "oThErNick"})
+
+      assert [player] == Players.list_players_without_users_by_nickname("otherN")
+    end
+
+    test "list_players_without_users_by_nickname/1 limits the result list to 10 if no page size has been given" do
+      for i <- 1..15, do: player_fixture(%{nickname: "some-nickname-#{i}"})
+
+      assert "some-NicKnAme"
+             |> Players.list_players_without_users_by_nickname()
+             |> length() == 10
+    end
+
+    test "list_players_without_users_by_nickname/1 limits the result list to the given page size" do
+      for i <- 1..15, do: player_fixture(%{nickname: "some-nickname-#{i}"})
+
+      assert "some-NicKnAme"
+             |> Players.list_players_without_users_by_nickname(page_size: 5)
+             |> length() == 5
+    end
+
+    test "list_players_without_users_by_nickname/1 only returns players without users" do
+      for i <- 1..15 do
+        user = user_fixture(%{email: "user-#{i}@email.org"})
+        player_fixture(%{nickname: "some-nickname-#{i}", user_id: user.id})
+      end
+
+      assert ""
+             |> Players.list_players_without_users_by_nickname(page_size: 5)
+             |> length() == 0
+    end
 
     test "list_players/0 returns all players" do
       player = player_fixture()

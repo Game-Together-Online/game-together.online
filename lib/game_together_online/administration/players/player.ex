@@ -7,13 +7,15 @@ defmodule GameTogetherOnline.Administration.Players.Player do
   schema "players" do
     field :nickname, :string
 
+    belongs_to :user, GameTogetherOnline.Administration.Users.User
+
     timestamps()
   end
 
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:nickname])
+    |> cast(attrs, [:nickname, :user_id])
     |> validate_required([:nickname])
   end
 end

@@ -10,6 +10,12 @@
 
 <.list>
   <:item title="Nickname"><%= @player.nickname %></:item>
+  <:item title="User">
+    <.live_component
+      module={GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent}
+      id="player-form"
+    />
+  </:item>
 </.list>
 
 <.back navigate={~p"/administration/players"}>Back to players</.back>
