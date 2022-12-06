@@ -9,8 +9,12 @@
 
 <.table id="players" rows={@players} row_click={&JS.navigate(~p"/administration/players/#{&1}")}>
   <:col :let={player} label="Nickname"><%= player.nickname %></:col>
-  <:col label="User">
-    No user
+  <:col :let={player} label="User">
+    <%= if player.user != nil do %>
+      <.link navigate={~p"/administration/users/#{player.user}"}><%= player.user.email %></.link>
+    <% else %>
+      No user
+    <% end %>
   </:col>
   <:action :let={player}>
     <div class="sr-only">

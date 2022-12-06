@@ -35,6 +35,14 @@ defmodule GameTogetherOnlineWeb.Administration.UserLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/administration/users")
       assert html =~ "No player"
     end
+
+    test "shows the player for the user when there is one", %{conn: conn} do
+      user = user_fixture()
+      player = player_fixture(%{user_id: user.id})
+
+      {:ok, _index_live, html} = live(conn, ~p"/administration/users")
+      assert html =~ player.nickname
+    end
   end
 
   describe "Show" do
@@ -57,9 +65,10 @@ defmodule GameTogetherOnlineWeb.Administration.UserLiveTest do
 
     test "it initially lists players who have not been assigned to a user", %{conn: conn} do
       user = user_fixture()
+      other_user = user_fixture()
 
       player_fixture(%{nickname: "first-player"})
-      player_fixture(%{nickname: "second-player", user_id: user.id})
+      player_fixture(%{nickname: "second-player", user_id: other_user.id})
 
       {:ok, _show_live, html} = live(conn, ~p"/administration/users/#{user}")
 
@@ -72,8 +81,9 @@ defmodule GameTogetherOnlineWeb.Administration.UserLiveTest do
       user = user_fixture()
       conn = get(conn, ~p"/")
 
+      other_user = user_fixture()
       [player] = Players.list_players()
-      {:ok, _player} = Players.update_player(player, %{user_id: user.id})
+      {:ok, _player} = Players.update_player(player, %{user_id: other_user.id})
 
       assert conn
              |> get(~p"/administration/users/#{user}")
@@ -107,6 +117,15 @@ defmodule GameTogetherOnlineWeb.Administration.UserLiveTest do
 
       refute html =~ "Anonymous"
       assert html =~ "No players without a user were found with a nickname that matches"
+    end
+
+    test "shows the player for the user when there is one", %{conn: conn} do
+      user = user_fixture()
+      player = player_fixture(%{user_id: user.id})
+
+      {:ok, _live, html} = live(conn, ~p"/administration/users/#{user}")
+
+      assert html =~ player.nickname
     end
   end
 end

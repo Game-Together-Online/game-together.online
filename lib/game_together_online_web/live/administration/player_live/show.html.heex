@@ -11,11 +11,21 @@
 <.list>
   <:item title="Nickname"><%= @player.nickname %></:item>
   <:item title="User">
-    <.live_component
-      module={GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent}
-      player={@player}
-      id="player-form"
-    />
+    <%= if @player.user != nil do %>
+      <.link navigate={~p"/administration/users/#{@player.user}"}>
+        <div class="flex items-center justify-between space-x-3 py-4">
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-gray-900"><%= @player.user.email %></p>
+          </div>
+        </div>
+      </.link>
+    <% else %>
+      <.live_component
+        module={GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent}
+        player={@player}
+        id="player-form"
+      />
+    <% end %>
   </:item>
 </.list>
 

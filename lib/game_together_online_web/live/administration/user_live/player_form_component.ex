@@ -122,7 +122,7 @@ defmodule GameTogetherOnlineWeb.Administration.UserLive.PlayerFormComponent do
   end
 
   def handle_event("associate_player", %{"player_id" => player_id}, socket) do
-    %{user: user} = socket.assign
+    %{user: user} = socket.assigns
 
     {:ok, _player} =
       player_id
