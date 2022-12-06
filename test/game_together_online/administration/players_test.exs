@@ -47,12 +47,15 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
 
     test "list_players/0 returns all players" do
       player = player_fixture()
-      assert Players.list_players() == [player]
+      assert Players.list_players() == [Map.put(player, :user, nil)]
     end
 
     test "get_player!/1 returns the player with given id" do
       player = player_fixture()
-      assert Players.get_player!(player.id) == player
+
+      assert player.id
+             |> Players.get_player!()
+             |> Map.put(:user, nil) == Map.put(player, :user, nil)
     end
 
     test "create_player/1 with valid data creates a player" do
@@ -77,7 +80,11 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
     test "update_player/2 with invalid data returns error changeset" do
       player = player_fixture()
       assert {:error, %Ecto.Changeset{}} = Players.update_player(player, @invalid_attrs)
-      assert player == Players.get_player!(player.id)
+
+      assert Map.put(player, :user, nil) ==
+               player.id
+               |> Players.get_player!()
+               |> Map.put(:user, nil)
     end
 
     test "delete_player/1 deletes the player" do

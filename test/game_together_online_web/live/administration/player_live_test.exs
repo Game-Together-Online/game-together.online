@@ -22,6 +22,14 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
       assert html =~ "No user"
     end
 
+    test "shows the user for the player when there is one", %{conn: conn} do
+      user = user_fixture()
+      player_fixture(%{user_id: user.id})
+
+      {:ok, _index_live, html} = live(conn, ~p"/administration/players")
+      assert html =~ user.email
+    end
+
     test "lists all players", %{conn: conn, player: player} do
       {:ok, _index_live, html} = live(conn, ~p"/administration/players")
 
@@ -126,7 +134,8 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
          %{conn: conn} do
       user = user_fixture(%{email: "first-email@something.org"})
       second_user = user_fixture(%{email: "second-email@something.org"})
-      player = player_fixture(%{user: user, nickname: "Player 1", user_id: user.id})
+      player = player_fixture(%{user: user, nickname: "Player 1"})
+      player_fixture(%{user_id: user.id})
 
       {:ok, _show_live, html} = live(conn, ~p"/administration/players/#{player}")
 
@@ -137,7 +146,8 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
     test "when there is no player for the user it initially shows an empty state when there are no players which have not been assigned to a user",
          %{conn: conn} do
       user = user_fixture(%{email: "first-email@something.org"})
-      player = player_fixture(%{user: user, nickname: "Player 1", user_id: user.id})
+      player = player_fixture(%{user: user, nickname: "Player 1"})
+      player_fixture(%{user_id: user.id})
 
       {:ok, _show_live, html} = live(conn, ~p"/administration/players/#{player}")
 
@@ -177,6 +187,14 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
       refute html =~ "second-email"
       refute html =~ "missing"
       assert html =~ "No users without a player were found with an email that matches"
+    end
+
+    test "shows the user for the player when there is one", %{conn: conn} do
+      user = user_fixture()
+      player = player_fixture(%{user_id: user.id})
+
+      {:ok, _live, html} = live(conn, ~p"/administration/players/#{player}")
+      assert html =~ user.email
     end
   end
 end

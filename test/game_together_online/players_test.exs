@@ -30,7 +30,7 @@ defmodule GameTogetherOnline.PlayersTest do
   test "update_player/2 with invalid data returns error changeset" do
     player = PlayersFixtures.player_fixture()
     assert {:error, %Ecto.Changeset{}} = Players.update_player(player, %{nickname: ""})
-    assert player == Administration.Players.get_player!(player.id)
+    assert Map.put(player, :user, nil) == Administration.Players.get_player!(player.id)
   end
 
   test "change_player/1 returns a player changeset" do

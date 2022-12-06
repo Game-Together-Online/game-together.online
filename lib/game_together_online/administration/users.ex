@@ -18,7 +18,9 @@ defmodule GameTogetherOnline.Administration.Users do
 
   """
   def list_users do
-    Repo.all(User)
+    User
+    |> Repo.all()
+    |> Repo.preload(:player)
   end
 
   def list_users_without_players_by_email(email, opts \\ []) do
@@ -49,5 +51,9 @@ defmodule GameTogetherOnline.Administration.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id),
+    do:
+      User
+      |> Repo.get!(id)
+      |> Repo.preload(:player)
 end

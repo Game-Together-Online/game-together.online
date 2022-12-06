@@ -4,8 +4,14 @@
 
 <.table id="users" rows={@users} row_click={&JS.navigate(~p"/administration/users/#{&1}")}>
   <:col :let={user} label="Email"><%= user.email %></:col>
-  <:col label="Player">
-    No player
+  <:col :let={user} label="Player">
+    <%= if user.player != nil do %>
+      <.link navigate={~p"/administration/players/#{user.player}"}>
+        <%= user.player.nickname %>
+      </.link>
+    <% else %>
+      No player
+    <% end %>
   </:col>
   <:col :let={user} label="Confirmed at"><%= user.confirmed_at %></:col>
 </.table>

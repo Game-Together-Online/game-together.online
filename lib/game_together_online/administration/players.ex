@@ -18,7 +18,9 @@ defmodule GameTogetherOnline.Administration.Players do
 
   """
   def list_players do
-    Repo.all(Player)
+    Player
+    |> Repo.all()
+    |> Repo.preload(:user)
   end
 
   def list_players_without_users_by_nickname(nickname, opts \\ []) do
@@ -49,7 +51,11 @@ defmodule GameTogetherOnline.Administration.Players do
       ** (Ecto.NoResultsError)
 
   """
-  def get_player!(id), do: Repo.get!(Player, id)
+  def get_player!(id),
+    do:
+      Player
+      |> Repo.get!(id)
+      |> Repo.preload(:user)
 
   @doc """
   Creates a player.
