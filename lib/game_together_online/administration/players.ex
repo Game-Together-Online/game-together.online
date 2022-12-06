@@ -4,9 +4,11 @@ defmodule GameTogetherOnline.Administration.Players do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Query.Builder.Updates
   alias GameTogetherOnline.Repo
 
   alias GameTogetherOnline.Administration.Players.Player
+  alias GameTogetherOnline.Administration.Players.Updates
 
   @doc """
   Returns the list of players.
@@ -91,6 +93,7 @@ defmodule GameTogetherOnline.Administration.Players do
     player
     |> Player.changeset(attrs)
     |> Repo.update()
+    |> Updates.broadcast()
   end
 
   @doc """
@@ -121,4 +124,7 @@ defmodule GameTogetherOnline.Administration.Players do
   def change_player(%Player{} = player, attrs \\ %{}) do
     Player.changeset(player, attrs)
   end
+
+  def subscribe_to_updates(), do: Updates.subscribe()
+  def subscribe_to_updates(player_id), do: Updates.subscribe(player_id)
 end
