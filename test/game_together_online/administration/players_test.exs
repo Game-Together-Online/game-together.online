@@ -85,7 +85,8 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
 
       {:ok, player} = Players.update_player(player, update_attrs)
 
-      assert_receive ^player
+      expected_player = Map.put(player, :user, nil)
+      assert_receive ^expected_player
     end
 
     test "update_player/2 with valid data broadcasts the change" do
@@ -96,7 +97,8 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
 
       {:ok, player} = Players.update_player(player, update_attrs)
 
-      assert_receive ^player
+      expected_player = Map.put(player, :user, nil)
+      assert_receive ^expected_player
     end
 
     test "update_player/2 with invalid data returns error changeset" do
@@ -128,6 +130,30 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
     test "change_player/1 returns a player changeset" do
       player = player_fixture()
       assert %Ecto.Changeset{} = Players.change_player(player)
+    end
+
+    test "unsubscribe_from_updates/0 unsubscribes from unscoped updates" do
+      player = player_fixture()
+      update_attrs = %{nickname: "some updated nickname"}
+
+      Players.subscribe_to_updates()
+      Players.unsubscribe_from_updates()
+
+      {:ok, _player} = Players.update_player(player, update_attrs)
+
+      refute_receive _msg
+    end
+
+    test "unsubscribe_from_updates/1 unsubscribes updates for the given player" do
+      player = player_fixture()
+      update_attrs = %{nickname: "some updated nickname"}
+
+      Players.subscribe_to_updates(player.id)
+      Players.unsubscribe_from_updates(player.id)
+
+      {:ok, _player} = Players.update_player(player, update_attrs)
+
+      refute_receive _msg
     end
   end
 end

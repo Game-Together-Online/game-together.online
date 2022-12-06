@@ -125,6 +125,10 @@ defmodule GameTogetherOnline.Administration.Players do
     Player.changeset(player, attrs)
   end
 
+  @spec subscribe_to_updates :: :ok | {:error, {:already_registered, pid}}
   def subscribe_to_updates(), do: Updates.subscribe()
   def subscribe_to_updates(player_id), do: Updates.subscribe(player_id)
+
+  def unsubscribe_from_updates(), do: Updates.unsubscribe()
+  def unsubscribe_from_updates(player_id), do: Updates.unsubscribe(player_id)
 end

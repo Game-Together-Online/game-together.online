@@ -10,7 +10,8 @@ defmodule GameTogetherOnline.Administration.Players.UpdatesTest do
     Updates.subscribe()
     Updates.broadcast({:ok, player})
 
-    assert_receive ^player
+    expected_player = Map.put(player, :user, nil)
+    assert_receive ^expected_player
   end
 
   test "subscribe/1 subscribes to updates for the given player" do
@@ -21,7 +22,27 @@ defmodule GameTogetherOnline.Administration.Players.UpdatesTest do
     Updates.broadcast({:ok, player})
     Updates.broadcast({:ok, other_player})
 
-    assert_receive ^player
+    expected_player = Map.put(player, :user, nil)
+    assert_receive ^expected_player
     refute_receive ^other_player
+  end
+
+  test "unsubscribe/0 unsubscribes from all player updates" do
+    player = player_fixture()
+    Updates.subscribe()
+    Updates.unsubscribe()
+    Updates.broadcast({:ok, player})
+
+    refute_receive _msg
+  end
+
+  test "unsubscribe/1 unsubscribes from updates for the given player" do
+    player = player_fixture()
+
+    Updates.subscribe(player.id)
+    Updates.unsubscribe(player.id)
+    Updates.broadcast({:ok, player})
+
+    refute_receive _msg
   end
 end

@@ -6,6 +6,10 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Players.subscribe_to_updates()
+    end
+
     {:ok, assign(socket, :players, list_players())}
   end
 
@@ -39,6 +43,20 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.Index do
 
     {:noreply, assign(socket, :players, list_players())}
   end
+
+  # TODO: Test this
+  @impl true
+  def handle_info(player, socket) do
+    %{players: players} = socket.assigns
+    {:noreply, assign(socket, :players, replace_player(players, player))}
+  end
+
+  defp replace_player(players, player) do
+    Enum.map(players, &replace_if_ids_match(&1, player))
+  end
+
+  defp replace_if_ids_match(%{id: id}, %{id: id} = player), do: player
+  defp replace_if_ids_match(original_player, _player), do: original_player
 
   defp list_players do
     Players.list_players()

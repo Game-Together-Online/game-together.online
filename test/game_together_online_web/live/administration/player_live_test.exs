@@ -5,6 +5,8 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
   import GameTogetherOnline.Administration.PlayersFixtures
   import GameTogetherOnline.AccountsFixtures
 
+  alias GameTogetherOnline.Administration.Players
+
   @create_attrs %{nickname: "some nickname"}
   @update_attrs %{nickname: "some updated nickname"}
   @invalid_attrs %{nickname: nil}
@@ -16,6 +18,19 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
 
   describe "Index" do
     setup [:create_player]
+
+    test "updates the rows when a player changes", %{conn: conn} do
+      player = player_fixture()
+
+      {:ok, live, html} = live(conn, ~p"/administration/players")
+
+      refute html =~ "New player nickname"
+
+      Players.subscribe_to_updates()
+      {:ok, _player} = Players.update_player(player, %{nickname: "New player nickname"})
+
+      assert render(live) =~ "New player nickname"
+    end
 
     test "shows an empty state when there is no user for the player", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/administration/players")
@@ -195,6 +210,19 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
 
       {:ok, _live, html} = live(conn, ~p"/administration/players/#{player}")
       assert html =~ user.email
+    end
+
+    test "updates the player when it changes", %{conn: conn} do
+      player = player_fixture()
+
+      {:ok, live, html} = live(conn, ~p"/administration/players/#{player}")
+
+      refute html =~ "New player nickname"
+
+      Players.subscribe_to_updates()
+      {:ok, _player} = Players.update_player(player, %{nickname: "New player nickname"})
+
+      assert render(live) =~ "New player nickname"
     end
   end
 end
