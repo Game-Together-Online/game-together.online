@@ -77,6 +77,28 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
       assert player.nickname == "some updated nickname"
     end
 
+    test "update_player/2 with valid data broadcasts the player" do
+      player = player_fixture()
+      update_attrs = %{nickname: "some updated nickname"}
+
+      Players.subscribe_to_updates(player.id)
+
+      {:ok, player} = Players.update_player(player, update_attrs)
+
+      assert_receive ^player
+    end
+
+    test "update_player/2 with valid data broadcasts the change" do
+      player = player_fixture()
+      update_attrs = %{nickname: "some updated nickname"}
+
+      Players.subscribe_to_updates()
+
+      {:ok, player} = Players.update_player(player, update_attrs)
+
+      assert_receive ^player
+    end
+
     test "update_player/2 with invalid data returns error changeset" do
       player = player_fixture()
       assert {:error, %Ecto.Changeset{}} = Players.update_player(player, @invalid_attrs)
@@ -85,6 +107,16 @@ defmodule GameTogetherOnline.Administration.PlayersTest do
                player.id
                |> Players.get_player!()
                |> Map.put(:user, nil)
+    end
+
+    test "update_player/2 with invalid data does not broadcast the update" do
+      player = player_fixture()
+      Players.subscribe_to_updates()
+      Players.subscribe_to_updates(player.id)
+
+      Players.update_player(player, @invalid_attrs)
+
+      refute_receive _msg
     end
 
     test "delete_player/1 deletes the player" do
