@@ -69,5 +69,21 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
       assert html =~ "Nickname updated successfully"
     end
+
+    test "shows the chat tab", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      assert html =~ "Current tab: chat"
+    end
+
+    test "switches to the players present tab", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      assert index_live
+             |> element("button", "Players Present")
+             |> render_click() =~ "Current tab: players_present"
+    end
   end
 end
