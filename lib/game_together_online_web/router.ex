@@ -33,6 +33,7 @@ defmodule GameTogetherOnlineWeb.Router do
 
     scope "/administration", Administration do
       get "/", PageController, :home
+      get "/danger_zone", DangerZoneController, :home
 
       scope "/spyfall", Spyfall do
         live "/locations", LocationLive.Index, :index
