@@ -3,6 +3,8 @@ defmodule GameTogetherOnline.TablesTest do
 
   alias GameTogetherOnline.Administration.TablesFixtures
   alias GameTogetherOnline.Tables
+  alias GameTogetherOnline.Tables.Updates
+  alias GameTogetherOnline.Tables.Presence
   alias GameTogetherOnline.Administration
   alias Ecto.UUID
 
@@ -37,6 +39,65 @@ defmodule GameTogetherOnline.TablesTest do
     assert table.id == created_table.id
     assert created_table.status == "game-pending"
     assert created_table.game_type_id == game_type.id
+  end
+
+  describe "track_presence/2" do
+    import GameTogetherOnline.Administration.TablesFixtures
+    import GameTogetherOnline.Administration.PlayersFixtures
+
+    test "tracks presence of a player" do
+      table = table_fixture()
+      player = player_fixture()
+      Presence.subscribe()
+      Tables.track_presence(table, player)
+
+      assert_receive %{event: "presence_diff", payload: payload}
+      %{joins: %{"all_table_presences" => joins}, leaves: %{}} = payload
+      %{metas: [%{player_id: player_id, table_id: table_id}]} = joins
+
+      assert player_id == player.id
+      assert table_id == table.id
+    end
+  end
+
+  describe "untrack_presence/2" do
+    import GameTogetherOnline.Administration.TablesFixtures
+    import GameTogetherOnline.Administration.PlayersFixtures
+
+    test "untracks presence of a player" do
+      table = table_fixture()
+      player = player_fixture()
+
+      Presence.subscribe()
+      Presence.track(table, player)
+
+      assert_receive %{event: "presence_diff", payload: _payload}
+
+      Presence.untrack()
+
+      assert_receive %{event: "presence_diff", payload: payload}
+      %{leaves: %{"all_table_presences" => leaves}, joins: %{}} = payload
+      %{metas: [%{player_id: player_id, table_id: table_id}]} = leaves
+
+      assert player_id == player.id
+      assert table_id == table.id
+    end
+  end
+
+  test "subscribe/1 subscibes to a table id" do
+    game_type = game_type_fixture()
+    {:ok, table} = Tables.create_table(game_type, %{})
+    Tables.subscribe(table.id)
+    Updates.broadcast(table)
+    assert_receive ^table
+  end
+
+  test "subscribe/0 subscibes to all table updates" do
+    game_type = game_type_fixture()
+    {:ok, table} = Tables.create_table(game_type, %{})
+    Tables.subscribe(table.id)
+    Updates.broadcast(table)
+    assert_receive ^table
   end
 
   defp equal?(first_table, second_table) do

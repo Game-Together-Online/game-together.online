@@ -11,6 +11,8 @@ config :game_together_online,
   ecto_repos: [GameTogetherOnline.Repo],
   generators: [binary_id: true]
 
+config :game_together_online, :presence_server, GameTogetherOnline.Tables.PresenceServer
+
 # Configures the endpoint
 config :game_together_online, GameTogetherOnlineWeb.Endpoint,
   url: [host: "localhost"],
