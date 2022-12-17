@@ -3,12 +3,16 @@ defmodule GameTogetherOnline.Tables.Table do
   import Ecto.Changeset
 
   alias GameTogetherOnline.GameTypes.GameType
+  alias GameTogetherOnline.Tables.TablePresence
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "tables" do
     field :status, :string
     belongs_to :game_type, GameType
+
+    has_many :table_presences, TablePresence
+    has_many :players_present, through: [:table_presences, :player]
 
     timestamps()
   end

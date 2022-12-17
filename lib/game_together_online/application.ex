@@ -7,6 +7,8 @@ defmodule GameTogetherOnline.Application do
 
   @impl true
   def start(_type, _args) do
+    presence_server = Application.get_env(:game_together_online, :presence_server)
+
     children = [
       # Start the Telemetry supervisor
       GameTogetherOnlineWeb.Telemetry,
@@ -17,9 +19,11 @@ defmodule GameTogetherOnline.Application do
       # Start Finch
       {Finch, name: GameTogetherOnline.Finch},
       # Start the Endpoint (http/https)
-      GameTogetherOnlineWeb.Endpoint
+      GameTogetherOnlineWeb.Endpoint,
       # Start a worker by calling: GameTogetherOnline.Worker.start_link(arg)
       # {GameTogetherOnline.Worker, arg}
+      GameTogetherOnline.Tables.Presence,
+      presence_server
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
