@@ -79,7 +79,11 @@
     </div>
   </div>
 
-  <.live_component module={GameTogetherOnlineWeb.Components.Sidebar} id={"sidebar-" <> @table.id} />
+  <.live_component
+    module={GameTogetherOnlineWeb.Components.Sidebar}
+    id={"sidebar-" <> @table.id}
+    players_present={@table.players_present}
+  />
 </div>
 
 <.modal
