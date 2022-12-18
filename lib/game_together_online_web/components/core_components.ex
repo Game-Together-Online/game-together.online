@@ -72,6 +72,7 @@ defmodule GameTogetherOnlineWeb.CoreComponents do
                   phx-click={hide_modal(@on_cancel, @id)}
                   type="button"
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  id={"modal-close-button-#{@id}"}
                   aria-label={gettext("close")}
                 >
                   <Heroicons.x_mark solid class="h-5 w-5 stroke-current" />

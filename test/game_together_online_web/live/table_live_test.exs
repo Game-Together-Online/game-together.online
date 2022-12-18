@@ -55,7 +55,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert index_live |> element("a", "Change Your Nickname") |> render_click() =~
                "Save"
 
-      assert_patch(index_live, ~p"/tables/#{table.id}/lobby?edit_nickname")
+      assert_patch(index_live, ~p"/tables/#{table.id}/lobby?tab=chat&edit_nickname=true")
 
       assert index_live
              |> form("#change-nickname-form", player: %{nickname: ""})
@@ -65,16 +65,46 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
         index_live
         |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
         |> render_submit()
-        |> follow_redirect(conn, ~p"/tables/#{table.id}/lobby")
+        |> follow_redirect(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
 
       assert html =~ "Nickname updated successfully"
     end
 
-    test "shows the chat tab", %{conn: conn} do
+    test "shows the chat tab by default", %{conn: conn} do
       table = TablesFixtures.table_fixture()
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert html =~ "Current tab: chat"
+    end
+
+    test "shows the chat tab when it has been selected", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
+
+      assert html =~ "Current tab: chat"
+    end
+
+    test "shows the players present tab when it has been selected", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
+
+      refute html =~ "Current tab: chat"
+    end
+
+    test "maintains the players present tab when the player updates their nickname", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
+
+      assert index_live |> element("a", "Change Your Nickname") |> render_click() =~
+               "Save"
+
+      {:ok, _, html} =
+        index_live
+        |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
+        |> render_submit()
+        |> follow_redirect(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
+
+      refute html =~ "Current tab: chat"
     end
 
     test "switches to the players present tab", %{conn: conn} do

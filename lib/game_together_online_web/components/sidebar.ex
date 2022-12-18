@@ -1,13 +1,6 @@
 defmodule GameTogetherOnlineWeb.Components.Sidebar do
   use Phoenix.LiveComponent
 
-  @default_tab :chat
-
-  @impl true
-  def mount(socket) do
-    {:ok, assign(socket, :current_tab, @default_tab)}
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -17,9 +10,8 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
           <nav class="-mb-px flex" aria-label="Tabs">
             <button
               phx-click="select_tab"
-              phx-value-tab={:chat}
-              phx-target={@myself}
-              class={tab_class(:chat, @current_tab) <> " w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm"}
+              phx-value-tab="chat"
+              class={tab_class("chat", @current_tab) <> " w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm"}
             >
               Chat
             </button>
@@ -27,16 +19,15 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
             <button
               href="#"
               phx-click="select_tab"
-              phx-value-tab={:players_present}
-              phx-target={@myself}
-              class={tab_class(:players_present, @current_tab) <> " w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm"}
+              phx-value-tab="players_present"
+              class={tab_class("players_present", @current_tab) <> " w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm"}
             >
               Players Present
             </button>
           </nav>
         </div>
 
-        <%= if @current_tab == :chat do %>
+        <%= if @current_tab == "chat" do %>
           <%= chat_tab(assigns) %>
         <% else %>
           <%= players_present_tab(assigns) %>
