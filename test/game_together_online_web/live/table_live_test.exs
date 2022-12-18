@@ -2,7 +2,10 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   use GameTogetherOnlineWeb.ConnCase
 
   import Phoenix.LiveViewTest
+  alias GameTogetherOnline.Tables
+  alias GameTogetherOnline.Tables.PresenceServer
   alias GameTogetherOnline.Administration.TablesFixtures
+  alias GameTogetherOnline.Administration.PlayersFixtures
   alias GameTogetherOnline.Administration.GameTypesFixtures
   alias Ecto.UUID
 
@@ -89,6 +92,24 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
 
       refute html =~ "Current tab: chat"
+    end
+
+    test "shows an empty state for the players present tab", %{conn: conn} do
+      table = TablesFixtures.table_fixture()
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
+
+      assert html =~ "There&#39;s nobody else here"
+    end
+
+    test "shows the players present", %{conn: conn} do
+      start_supervised!(PresenceServer)
+      table = TablesFixtures.table_fixture()
+      other_player = PlayersFixtures.player_fixture()
+      Tables.track_presence(table, other_player)
+
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
+
+      assert render(index_live) =~ other_player.nickname
     end
 
     test "maintains the players present tab when the player updates their nickname", %{conn: conn} do

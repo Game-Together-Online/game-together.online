@@ -82,8 +82,9 @@
   <.live_component
     module={GameTogetherOnlineWeb.Components.Sidebar}
     id={"sidebar-" <> @table.id}
-    players_present={@table.players_present}
+    players_present={Enum.filter(@table.players_present, &(&1.id != @current_player.id))}
     current_tab={@current_tab}
+    invite_url={@invite_url}
   />
 </div>
 
