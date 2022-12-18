@@ -22,7 +22,7 @@
         </div>
         <div class="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
           <.link
-            patch={~p"/tables/#{@table.id}/lobby?edit_nickname"}
+            patch={~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}&edit_nickname=true"}
             class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Change Your Nickname
@@ -83,6 +83,7 @@
     module={GameTogetherOnlineWeb.Components.Sidebar}
     id={"sidebar-" <> @table.id}
     players_present={@table.players_present}
+    current_tab={@current_tab}
   />
 </div>
 
@@ -90,12 +91,12 @@
   :if={@show_edit_nickname_modal}
   id="change-nickname-modal"
   show
-  on_cancel={JS.navigate(~p"/tables/#{@table.id}/lobby")}
+  on_cancel={JS.navigate(~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}")}
 >
   <.live_component
     module={GameTogetherOnlineWeb.TableLive.ChangeNicknameComponent}
     id={@current_player.id}
     player={@current_player}
-    navigate={~p"/tables/#{@table.id}/lobby"}
+    navigate={~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}"}
   />
 </.modal>
