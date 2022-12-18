@@ -79,11 +79,12 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
     test "switches to the players present tab", %{conn: conn} do
       table = TablesFixtures.table_fixture()
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert index_live
              |> element("button", "Players Present")
-             |> render_click() =~ "Current tab: players_present"
+             |> render_click() =~ conn.assigns.current_player.nickname
     end
   end
 end

@@ -35,9 +35,41 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
             </button>
           </nav>
         </div>
-        Current tab: <%= @current_tab %>
+
+        <%= if @current_tab == :chat do %>
+          <%= chat_tab(assigns) %>
+        <% else %>
+          <%= players_present_tab(assigns) %>
+        <% end %>
       </div>
     </div>
+    """
+  end
+
+  defp chat_tab(assigns) do
+    ~H"""
+    Current tab: chat
+    """
+  end
+
+  defp players_present_tab(assigns) do
+    ~H"""
+    <ul role="list" class="divide-y divide-gray-200">
+      <%= for player_present <- @players_present do %>
+        <li class="flex items-center justify-between space-x-3 py-4 px-4">
+          <div class="flex min-w-0 flex-1 items-center space-x-3">
+            <div class="flex-shrink-0">
+              <span class="inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </span>
+            </div>
+            <p class="truncate text-sm font-medium text-gray-900"><%= player_present.nickname %></p>
+          </div>
+        </li>
+      <% end %>
+    </ul>
     """
   end
 
