@@ -1,0 +1,39 @@
+<.header>
+  Listing Chats
+  <:actions>
+    <.link patch={~p"/administration/chats/new"}>
+      <.button>New Chat</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="chats" rows={@chats} row_click={&JS.navigate(~p"/administration/chats/#{&1}")}>
+  <:col :let={chat} label="Table"><%= chat.table_id %></:col>
+  <:action :let={chat}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/chats/#{chat}"}>Show</.link>
+    </div>
+    <.link patch={~p"/administration/chats/#{chat}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={chat}>
+    <.link phx-click={JS.push("delete", value: %{id: chat.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="chat-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/chats")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.ChatLive.FormComponent}
+    id={@chat.id || :new}
+    title={@page_title}
+    action={@live_action}
+    chat={@chat}
+    navigate={~p"/administration/chats"}
+  />
+</.modal>
