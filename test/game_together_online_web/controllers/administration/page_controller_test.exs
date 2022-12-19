@@ -14,5 +14,7 @@ defmodule GameTogetherOnlineWeb.Administration.PageControllerTest do
     assert html_response(conn, 200) =~ ~p"/administration/roles"
 
     assert html_response(conn, 200) =~ ~p"/administration/spyfall/locations"
+
+    assert html_response(conn, 200) =~ ~p"/administration/chats"
   end
 end

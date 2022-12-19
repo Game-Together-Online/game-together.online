@@ -1,0 +1,35 @@
+<.header>
+  Chat <%= @chat.id %>
+  <:subtitle>This is a chat record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/administration/chats/#{@chat}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit chat</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Table">
+    <.link navigate={~p"/administration/tables/#{@chat.table_id}"}>
+      <%= @chat.table_id %>
+    </.link>
+  </:item>
+</.list>
+
+<.back navigate={~p"/administration/chats"}>Back to chats</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="chat-modal"
+  show
+  on_cancel={JS.patch(~p"/administration/chats/#{@chat}")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.ChatLive.FormComponent}
+    id={@chat.id}
+    title={@page_title}
+    action={@live_action}
+    chat={@chat}
+    navigate={~p"/administration/chats/#{@chat}"}
+  />
+</.modal>
