@@ -7,7 +7,7 @@ defmodule GameTogetherOnline.Tables.TableTest do
 
   import GameTogetherOnline.Administration.GameTypesFixtures
 
-  @valid_attrs %{status: "game-pending"}
+  @valid_attrs %{status: "game-pending", chat: %{}}
 
   test "is invalid without a status" do
     game_type = game_type_fixture()

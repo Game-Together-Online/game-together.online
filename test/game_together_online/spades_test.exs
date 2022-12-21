@@ -5,6 +5,7 @@ defmodule GameTogetherOnline.SpadesTest do
 
   alias GameTogetherOnline.Spades
   alias GameTogetherOnline.Administration.Tables
+  alias GameTogetherOnline.Administration.Chats
 
   test "create_table/1 creates a spades table" do
     game_type = game_type_fixture(%{slug: "spades"})
@@ -14,5 +15,8 @@ defmodule GameTogetherOnline.SpadesTest do
     assert table.id == created_table.id
     assert created_table.status == "game-pending"
     assert created_table.game_type_id == game_type.id
+
+    [chat] = Chats.list_chats()
+    assert chat.table_id == table.id
   end
 end
