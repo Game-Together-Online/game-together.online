@@ -52,6 +52,15 @@ defmodule GameTogetherOnlineWeb.Router do
         live "/:id/show/edit", Show, :edit
       end
 
+      scope "/chat_messages", ChatMessageLive do
+        live "/", Index, :index
+        live "/new", Index, :new
+        live "/:id/edit", Index, :edit
+
+        live "/:id", Show, :show
+        live "/:id/show/edit", Show, :edit
+      end
+
       scope "/users", UserLive do
         live "/", Index, :index
         live "/:id", Show, :show
