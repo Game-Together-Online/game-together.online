@@ -7,6 +7,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   alias GameTogetherOnline.Administration.TablesFixtures
   alias GameTogetherOnline.Administration.PlayersFixtures
   alias GameTogetherOnline.Administration.GameTypesFixtures
+  alias GameTogetherOnline.Administration.ChatMessages
   alias Ecto.UUID
 
   describe "Lobby" do
@@ -136,6 +137,26 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert index_live
              |> element("button", "Players Present")
              |> render_click() =~ conn.assigns.current_player.nickname
+    end
+
+    test "allows creating chat messages", %{conn: conn} do
+      spyfall_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spyfall"})
+      {:ok, table} = Tables.create_table(spyfall_game_type, %{})
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
+
+      current_player = conn.assigns.current_player
+
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live
+      |> form("#chat_message-form", chat_message: %{content: "some content"})
+      |> render_submit()
+
+      [chat_message] = ChatMessages.list_chat_messages()
+
+      assert chat_message.content == "some content"
+      assert chat_message.chat_id == table.chat.id
+      assert chat_message.player_id == current_player.id
     end
   end
 end
