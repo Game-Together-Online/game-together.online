@@ -1,9 +1,9 @@
-defmodule GameTogetherOnline.Administration.ChatMessages.ChatMessage do
+defmodule GameTogetherOnline.ChatMessages.ChatMessage do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias GameTogetherOnline.Administration.Chats.Chat
-  alias GameTogetherOnline.Administration.Players.Player
+  alias GameTogetherOnline.Chats.Chat
+  alias GameTogetherOnline.Players.Player
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -16,7 +16,6 @@ defmodule GameTogetherOnline.Administration.ChatMessages.ChatMessage do
     timestamps()
   end
 
-  # TODO: Test this
   @doc false
   def changeset(chat_message, attrs) do
     chat_message

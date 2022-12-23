@@ -12,6 +12,7 @@ defmodule GameTogetherOnline.Chats.Chat do
     timestamps()
   end
 
+  # TODO: Test this
   @doc false
   def changeset(chat, attrs) do
     chat

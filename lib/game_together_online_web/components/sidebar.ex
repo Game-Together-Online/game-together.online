@@ -1,5 +1,5 @@
 defmodule GameTogetherOnlineWeb.Components.Sidebar do
-  use Phoenix.LiveComponent
+  use GameTogetherOnlineWeb, :live_component
 
   @impl true
   def render(assigns) do
@@ -37,7 +37,37 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
 
   defp chat_tab(assigns) do
     ~H"""
-    Current tab: chat
+    <div class="h-full flex flex-col">
+      <div class="grow">Current tab: chat</div>
+      <.chat_message_form chat_message={@chat_message} />
+    </div>
+    """
+  end
+
+  defp chat_message_form(assigns) do
+    ~H"""
+    <.form for={@chat_message} class="p-4" id="chat_message-form" phx-submit="create-chat_message">
+      <div>
+        <label class="sr-only">Chat message</label>
+        <div>
+          <textarea
+            rows="5"
+            name="chat_message[content]"
+            id="chat_message"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Add your comment..."
+          />
+        </div>
+      </div>
+      <div class="mt-2 flex justify-end">
+        <.button
+          type="submit"
+          class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Post
+        </.button>
+      </div>
+    </.form>
     """
   end
 
