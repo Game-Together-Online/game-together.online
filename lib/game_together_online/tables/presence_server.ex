@@ -43,6 +43,7 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
     |> where([t], t.id in ^table_ids)
     |> preload(:players_present)
     |> preload(:game_type)
+    |> preload(chat: [chat_messages: :player])
     |> Repo.all()
   end
 

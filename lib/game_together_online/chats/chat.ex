@@ -3,11 +3,14 @@ defmodule GameTogetherOnline.Chats.Chat do
   import Ecto.Changeset
 
   alias GameTogetherOnline.Administration.Tables.Table
+  alias GameTogetherOnline.ChatMessages.ChatMessage
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "chats" do
     belongs_to :table, Table
+
+    has_many :chat_messages, ChatMessage
 
     timestamps()
   end

@@ -20,7 +20,7 @@ defmodule GameTogetherOnline.Tables do
       |> Repo.get!(id)
       |> Repo.preload(:game_type)
       |> Repo.preload(:players_present)
-      |> Repo.preload(:chat)
+      |> Repo.preload(chat: [chat_messages: :player])
 
   def create_table(game_type, options) do
     table_factory = factory_for_table(game_type)
