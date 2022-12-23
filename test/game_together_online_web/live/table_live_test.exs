@@ -10,11 +10,13 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   alias GameTogetherOnline.Administration.ChatMessages
   alias Ecto.UUID
 
+  setup :create_table
+
   describe "Lobby" do
     test "shows the edit nickname modal when the edit_nickname query param is present", %{
-      conn: conn
+      conn: conn,
+      table: table
     } do
-      table = TablesFixtures.table_fixture()
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?edit_nickname")
       assert html =~ "change-nickname-modal"
     end
@@ -28,8 +30,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert_raise Ecto.NoResultsError, fn -> live(conn, ~p"/tables/#{table_id}/lobby") end
     end
 
-    test "shows the lobby when the table exists", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "shows the lobby when the table exists", %{conn: conn, table: table} do
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert html =~ "Welcome to the game,"
@@ -38,22 +39,20 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
     end
 
     test "shows the spades lobby for spades tables", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+      spades_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spades"})
+      {:ok, table} = Tables.create_table(spades_game_type, %{})
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert html =~ "SPADES"
     end
 
-    test "shows the spyfall lobby for spyfall tables", %{conn: conn} do
-      spyfall_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spyfall"})
-      table = TablesFixtures.table_fixture(%{game_type_id: spyfall_game_type.id})
+    test "shows the spyfall lobby for spyfall tables", %{conn: conn, table: table} do
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert html =~ "SPYFALL"
     end
 
-    test "allows players to update their nickname", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "allows players to update their nickname", %{conn: conn, table: table} do
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       assert index_live |> element("a", "Change Your Nickname") |> render_click() =~
@@ -74,37 +73,43 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert html =~ "Nickname updated successfully"
     end
 
-    test "shows the chat tab by default", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
-      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
+    test "shows the chat tab by default", %{conn: conn, table: table} do
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
-      assert html =~ "Current tab: chat"
+      index_live
+      |> form("#chat_message-form", chat_message: %{content: "some chat message content"})
+      |> render_submit()
+
+      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
+      assert html =~ "some chat message content"
     end
 
-    test "shows the chat tab when it has been selected", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "shows the chat tab when it has been selected", %{conn: conn, table: table} do
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live
+      |> form("#chat_message-form", chat_message: %{content: "some chat message content"})
+      |> render_submit()
+
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
 
-      assert html =~ "Current tab: chat"
+      assert html =~ "some chat message content"
     end
 
-    test "shows the players present tab when it has been selected", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "shows the players present tab when it has been selected", %{conn: conn, table: table} do
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
 
       refute html =~ "Current tab: chat"
     end
 
-    test "shows an empty state for the players present tab", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "shows an empty state for the players present tab", %{conn: conn, table: table} do
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
 
       assert html =~ "There&#39;s nobody else here"
     end
 
-    test "shows the players present", %{conn: conn} do
+    test "shows the players present", %{conn: conn, table: table} do
       start_supervised!(PresenceServer)
-      table = TablesFixtures.table_fixture()
       other_player = PlayersFixtures.player_fixture()
       Tables.track_presence(table, other_player)
 
@@ -113,8 +118,10 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert render(index_live) =~ other_player.nickname
     end
 
-    test "maintains the players present tab when the player updates their nickname", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "maintains the players present tab when the player updates their nickname", %{
+      conn: conn,
+      table: table
+    } do
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
 
       assert index_live |> element("a", "Change Your Nickname") |> render_click() =~
@@ -129,8 +136,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       refute html =~ "Current tab: chat"
     end
 
-    test "switches to the players present tab", %{conn: conn} do
-      table = TablesFixtures.table_fixture()
+    test "switches to the players present tab", %{conn: conn, table: table} do
       conn = get(conn, ~p"/tables/#{table.id}/lobby")
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
@@ -139,9 +145,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
              |> render_click() =~ conn.assigns.current_player.nickname
     end
 
-    test "allows creating chat messages", %{conn: conn} do
-      spyfall_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spyfall"})
-      {:ok, table} = Tables.create_table(spyfall_game_type, %{})
+    test "allows creating chat messages", %{conn: conn, table: table} do
       conn = get(conn, ~p"/tables/#{table.id}/lobby")
 
       current_player = conn.assigns.current_player
@@ -157,6 +161,12 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert chat_message.content == "some content"
       assert chat_message.chat_id == table.chat.id
       assert chat_message.player_id == current_player.id
+    end
+
+    def create_table(_) do
+      spyfall_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spyfall"})
+      {:ok, table} = Tables.create_table(spyfall_game_type, %{})
+      {:ok, %{table: table}}
     end
   end
 end
