@@ -208,7 +208,7 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
       user = user_fixture()
       player = player_fixture()
 
-      {:ok, live, html} = live(conn, ~p"/administration/players/#{player}")
+      {:ok, live, _html} = live(conn, ~p"/administration/players/#{player}")
 
       assert live
              |> element("button", "Assign #{user.email}")
