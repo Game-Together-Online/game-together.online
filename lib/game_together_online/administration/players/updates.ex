@@ -6,7 +6,6 @@ defmodule GameTogetherOnline.Administration.Players.Updates do
   @pubsub GameTogetherOnline.PubSub
 
   def broadcast({:ok, player}) do
-    # TODO: Test this
     player_with_user = Repo.preload(player, :user, force: true)
     PubSub.broadcast(@pubsub, topic(player.id), player_with_user)
     PubSub.broadcast(@pubsub, topic("all"), player_with_user)

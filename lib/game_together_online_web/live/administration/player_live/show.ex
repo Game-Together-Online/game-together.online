@@ -24,7 +24,6 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.Show do
      |> assign(:player, Players.get_player!(id))}
   end
 
-  # TODO: Test this
   @impl true
   def handle_info(player, socket) do
     {:noreply, assign(socket, :player, player)}

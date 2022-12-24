@@ -18,13 +18,13 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent do
   @impl true
   def render(%{users: [], email_filter: ""} = assigns) do
     ~H"""
-    <div class="mx-auto max-w-lg">OOPS! No users found.</div>
+    <div class="mx-auto w-96">OOPS! No users found.</div>
     """
   end
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-lg">
+    <div class="mx-auto w-96">
       <div>
         <div class="text-center">
           <svg
@@ -118,7 +118,6 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.UserFormComponent do
      |> assign(:email_filter, email)}
   end
 
-  # TODO: Test this
   def handle_event("associate_user", %{"user_id" => user_id}, socket) do
     %{player: player} = socket.assigns
     {:ok, _player} = Players.update_player(player, %{user_id: user_id})

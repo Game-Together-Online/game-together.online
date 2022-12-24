@@ -4,7 +4,6 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   import Phoenix.LiveViewTest
   alias GameTogetherOnline.Tables
   alias GameTogetherOnline.Tables.PresenceServer
-  alias GameTogetherOnline.Administration.TablesFixtures
   alias GameTogetherOnline.Administration.PlayersFixtures
   alias GameTogetherOnline.Administration.GameTypesFixtures
   alias GameTogetherOnline.Administration.ChatMessages
