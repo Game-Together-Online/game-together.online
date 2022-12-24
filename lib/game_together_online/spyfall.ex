@@ -11,7 +11,12 @@ defmodule GameTogetherOnline.Spyfall do
 
   def create_table(_options \\ %{}) do
     %Table{}
-    |> Table.changeset(%{status: "game-pending", game_type_id: load_game_type_id(), chat: %{}})
+    |> Table.changeset(%{
+      status: "game-pending",
+      game_type_id: load_game_type_id(),
+      chat: %{},
+      spyfall_game: %{}
+    })
     |> Repo.insert()
   end
 
