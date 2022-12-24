@@ -5,6 +5,7 @@ defmodule GameTogetherOnline.TablesTest do
   alias GameTogetherOnline.Tables
   alias GameTogetherOnline.Tables.Presence
   alias GameTogetherOnline.Administration
+  alias GameTogetherOnline.Administration.SpyfallGames
   alias Ecto.UUID
 
   import GameTogetherOnline.GameTypesFixtures
@@ -32,6 +33,19 @@ defmodule GameTogetherOnline.TablesTest do
 
   test "create_table/2 creates spyfall tables" do
     game_type = game_type_fixture(%{slug: "spyfall"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    [created_table] = Administration.Tables.list_tables()
+
+    assert table.id == created_table.id
+    assert created_table.status == "game-pending"
+    assert created_table.game_type_id == game_type.id
+
+    [game] = SpyfallGames.list_spyfall_games()
+    assert game.table_id == table.id
+  end
+
+  test "create_table/2 creates chess tables" do
+    game_type = game_type_fixture(%{slug: "chess"})
     {:ok, table} = Tables.create_table(game_type, %{})
     [created_table] = Administration.Tables.list_tables()
 
