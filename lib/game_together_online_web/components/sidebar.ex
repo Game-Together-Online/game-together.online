@@ -51,7 +51,7 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
     <div class="flow-root">
       <ul role="list" class="-mb-8 px-4 pt-4">
         <%= for chat_message <- @chat_messages do %>
-          <.chat_message chat_message={chat_message} />
+          <.chat_message chat_message={chat_message} last={chat_message == List.last(@chat_messages)} />
         <% end %>
       </ul>
     </div>
@@ -89,30 +89,24 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
     ~H"""
     <li>
       <div class="relative pb-8">
-        <span class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+        <span
+          class={[
+            "absolute top-5 left-5 -ml-px h-full w-0.5",
+            if(@last, do: "", else: "bg-gray-200")
+          ]}
+          aria-hidden="true"
+        >
+        </span>
         <div class="relative flex items-start space-x-3">
           <div class="relative">
-            <img
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
-              src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
-              alt=""
-            />
-
-            <span class="absolute -bottom-0.5 -right-1 rounded-tl bg-white px-0.5 py-px">
-              <!-- Heroicon name: mini/chat-bubble-left-ellipsis -->
-              <svg
-                class="h-5 w-5 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902.848.137 1.705.248 2.57.331v3.443a.75.75 0 001.28.53l3.58-3.579a.78.78 0 01.527-.224 41.202 41.202 0 005.183-.5c1.437-.232 2.43-1.49 2.43-2.903V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zm0 7a1 1 0 100-2 1 1 0 000 2zM8 8a1 1 0 11-2 0 1 1 0 012 0zm5 1a1 1 0 100-2 1 1 0 000 2z"
-                  clip-rule="evenodd"
-                />
+            <span class="inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-100 ring-8 ring-gray-50">
+              <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
+            </span>
+
+            <span class="absolute -bottom-0.5 -right-1 rounded-tl bg-gray-50 px-0.5 py-px">
+              <Heroicons.chat_bubble_left_ellipsis solid class="h-5 w-5 text-gray-400" />
             </span>
           </div>
           <div class="min-w-0 flex-1">
@@ -122,7 +116,15 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
                   <%= @chat_message.player.nickname %>
                 </a>
               </div>
-              <p class="mt-0.5 text-sm text-gray-500">Commented 6d ago</p>
+              <p class="mt-0.5 text-sm text-gray-500">
+                Commented
+                <.time_ago
+                  id={"chat-message-inserted-at-#{@chat_message.id}"}
+                  timestamp={@chat_message.inserted_at}
+                >
+                  --
+                </.time_ago>
+              </p>
             </div>
             <div class="mt-2 text-sm text-gray-700">
               <p>

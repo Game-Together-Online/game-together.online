@@ -10,7 +10,7 @@ defmodule GameTogetherOnline.Administration.Tables.Table do
     field :status, :string
     belongs_to :game_type, GameType
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

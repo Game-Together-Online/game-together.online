@@ -17,7 +17,7 @@ defmodule GameTogetherOnline.Tables.Table do
 
     has_one :chat, Chat
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

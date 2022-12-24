@@ -10,7 +10,7 @@ defmodule GameTogetherOnline.Administration.GameTypes.GameType do
     field :slug, :string
     field :enabled, :boolean
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

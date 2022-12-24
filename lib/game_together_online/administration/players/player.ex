@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.Administration.Players.Player do
 
     belongs_to :user, GameTogetherOnline.Administration.Users.User
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

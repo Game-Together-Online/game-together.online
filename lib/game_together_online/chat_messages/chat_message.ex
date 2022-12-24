@@ -13,7 +13,7 @@ defmodule GameTogetherOnline.ChatMessages.ChatMessage do
     belongs_to :chat, Chat
     belongs_to :player, Player
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

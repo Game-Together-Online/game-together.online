@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.Players.Player do
   schema "players" do
     field :nickname, :string
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

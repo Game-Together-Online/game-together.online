@@ -9,6 +9,6 @@ defmodule GameTogetherOnline.Administration.Users.User do
 
     has_one :player, GameTogetherOnline.Administration.Players.Player
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 end

@@ -69,8 +69,8 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
 
   defp add_players_to_table(players_and_tables) do
     now =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.truncate(:second)
+      DateTime.utc_now()
+      |> DateTime.truncate(:second)
 
     to_insert =
       Enum.map(

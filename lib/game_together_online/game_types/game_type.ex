@@ -10,7 +10,7 @@ defmodule GameTogetherOnline.GameTypes.GameType do
     field :slug, :string
     field :enabled, :boolean
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   def which_are_enabled(query) do

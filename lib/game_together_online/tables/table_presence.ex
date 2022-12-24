@@ -12,7 +12,7 @@ defmodule GameTogetherOnline.Tables.TablePresence do
     belongs_to :player, Player
     belongs_to :table, Table
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
