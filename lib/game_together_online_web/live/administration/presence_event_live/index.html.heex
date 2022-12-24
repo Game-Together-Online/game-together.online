@@ -1,0 +1,50 @@
+<.header>
+  Listing Presence events
+  <:actions>
+    <.link patch={~p"/administration/presence_events/new"}>
+      <.button>New Presence event</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="presence_events"
+  rows={@presence_events}
+  row_click={&JS.navigate(~p"/administration/presence_events/#{&1}")}
+>
+  <:col :let={presence_event} label="Type"><%= presence_event.type %></:col>
+  <:col :let={presence_event} label="chat"><%= presence_event.chat_id %></:col>
+  <:col :let={presence_event} label="player"><%= presence_event.player_id %></:col>
+  <:action :let={presence_event}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/presence_events/#{presence_event}"}>Show</.link>
+    </div>
+    <.link patch={~p"/administration/presence_events/#{presence_event}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={presence_event}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: presence_event.id})}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="presence_event-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/presence_events")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.PresenceEventLive.FormComponent}
+    id={@presence_event.id || :new}
+    title={@page_title}
+    action={@live_action}
+    presence_event={@presence_event}
+    navigate={~p"/administration/presence_events"}
+  />
+</.modal>
+
+<.back navigate={~p"/administration"}>Back to administration</.back>

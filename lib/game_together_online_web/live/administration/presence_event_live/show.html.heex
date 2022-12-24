@@ -1,0 +1,36 @@
+<.header>
+  Presence event <%= @presence_event.id %>
+  <:subtitle>This is a presence_event record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/administration/presence_events/#{@presence_event}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Edit presence_event</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Type"><%= @presence_event.type %></:item>
+  <:item title="chat"><%= @presence_event.chat_id %></:item>
+  <:item title="player"><%= @presence_event.player_id %></:item>
+</.list>
+
+<.back navigate={~p"/administration/presence_events"}>Back to presence_events</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="presence_event-modal"
+  show
+  on_cancel={JS.patch(~p"/administration/presence_events/#{@presence_event}")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.PresenceEventLive.FormComponent}
+    id={@presence_event.id}
+    title={@page_title}
+    action={@live_action}
+    presence_event={@presence_event}
+    navigate={~p"/administration/presence_events/#{@presence_event}"}
+  />
+</.modal>
