@@ -20,7 +20,7 @@ defmodule GameTogetherOnline.Tables do
       |> Repo.get!(id)
       |> Repo.preload(:game_type)
       |> Repo.preload(:players_present)
-      |> Repo.preload(chat: [chat_messages: :player])
+      |> Repo.preload(chat: [presence_events: :player, chat_messages: :player])
 
   def create_table(game_type, options) do
     table_strategy = strategy_for_table(game_type)
