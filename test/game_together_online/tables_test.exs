@@ -3,7 +3,6 @@ defmodule GameTogetherOnline.TablesTest do
 
   alias GameTogetherOnline.Administration.TablesFixtures
   alias GameTogetherOnline.Tables
-  alias GameTogetherOnline.Tables.Updates
   alias GameTogetherOnline.Tables.Presence
   alias GameTogetherOnline.Administration
   alias Ecto.UUID
@@ -88,16 +87,18 @@ defmodule GameTogetherOnline.TablesTest do
     game_type = game_type_fixture()
     {:ok, table} = Tables.create_table(game_type, %{})
     Tables.subscribe(table.id)
-    Updates.broadcast(table)
-    assert_receive ^table
+    Tables.broadcast(table.id)
+    assert_receive table_update
+    assert table_update.id == table.id
   end
 
   test "subscribe/0 subscibes to all table updates" do
     game_type = game_type_fixture()
     {:ok, table} = Tables.create_table(game_type, %{})
     Tables.subscribe(table.id)
-    Updates.broadcast(table)
-    assert_receive ^table
+    Tables.broadcast(table.id)
+    assert_receive table_update
+    assert table_update.id == table.id
   end
 
   defp equal?(first_table, second_table) do

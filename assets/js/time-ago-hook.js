@@ -1,5 +1,5 @@
 const timeAgo = (timestamp, locale = "en") => {
-  const diff = Math.round(new Date().getTime() - timestamp.getTime()) / 1000);
+  const diff = Math.round((new Date().getTime() - timestamp.getTime()) / 1000);
   const minutes = Math.floor(diff / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);

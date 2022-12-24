@@ -38,7 +38,11 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
   defp chat_tab(assigns) do
     ~H"""
     <div class="h-full flex flex-col">
-      <div class="overflow-y-scroll flex-grow h-0">
+      <div
+        class="overflow-y-scroll flex-grow h-0"
+        phx-hook="ScrollToBottomOnUpdate"
+        id="chat-message-list"
+      >
         <.chat_messages chat_messages={@chat.chat_messages} />
       </div>
       <.chat_message_form chat_message={@chat_message} />
@@ -48,19 +52,24 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
 
   defp chat_messages(assigns) do
     ~H"""
-    <div class="flow-root">
-      <ul role="list" class="-mb-8 px-4 pt-4">
-        <%= for chat_message <- @chat_messages do %>
-          <.chat_message chat_message={chat_message} last={chat_message == List.last(@chat_messages)} />
-        <% end %>
-      </ul>
-    </div>
+    <ul role="list" class="-mb-8 px-4 pt-4">
+      <%= for chat_message <- @chat_messages do %>
+        <.chat_message chat_message={chat_message} last={chat_message == List.last(@chat_messages)} />
+      <% end %>
+    </ul>
     """
   end
 
   defp chat_message_form(assigns) do
     ~H"""
-    <.form for={@chat_message} class="p-4" id="chat_message-form" phx-submit="create-chat_message">
+    <.form
+      for={@chat_message}
+      class="p-4"
+      id="chat_message-form"
+      phx-submit="create-chat_message"
+      phx-hook="SubmitOnEnter"
+      data-form-to-submit="chat_message-form"
+    >
       <div>
         <label class="sr-only">Chat message</label>
         <div>
