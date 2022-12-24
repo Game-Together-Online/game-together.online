@@ -4,13 +4,15 @@ defmodule GameTogetherOnline.Chats.Chat do
 
   alias GameTogetherOnline.Administration.Tables.Table
   alias GameTogetherOnline.ChatMessages.ChatMessage
+  alias GameTogetherOnline.PresenceEvents.PresenceEvent
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "chats" do
     belongs_to :table, Table
 
-    has_many :chat_messages, ChatMessage, preload_order: [asc: :inserted_at]
+    has_many :chat_messages, ChatMessage
+    has_many :presence_events, PresenceEvent
 
     timestamps(type: :utc_datetime)
   end

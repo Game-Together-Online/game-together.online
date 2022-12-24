@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.SpyfallGames.SpyfallGame do
   schema "spyfall_games" do
     belongs_to :table, Table
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
