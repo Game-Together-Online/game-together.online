@@ -7,7 +7,7 @@ defmodule GameTogetherOnline.Administration.Spyfall.Location do
   schema "spyfall_locations" do
     field :name, :string
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

@@ -24,9 +24,11 @@ import topbar from "../vendor/topbar"
 
 // Import our hooks
 import Clipboard from "./clipboard-hook";
+import TimeAgo from "./time-ago-hook";
 
 const Hooks = {
-    Clipboard
+    Clipboard,
+    TimeAgo
 };
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")

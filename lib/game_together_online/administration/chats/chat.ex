@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.Administration.Chats.Chat do
   schema "chats" do
     belongs_to :table, Table
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

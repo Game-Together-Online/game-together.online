@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.Authorization.Role do
     field :name, :string
     field :slug, :string
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

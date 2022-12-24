@@ -618,6 +618,14 @@ defmodule GameTogetherOnlineWeb.CoreComponents do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
 
+  def time_ago(assigns) do
+    ~H"""
+    <span phx-hook="TimeAgo" id={"time-ago-#{@id}"} data-timestamp={@timestamp}>
+      <%= render_slot(@inner_block) %>
+    </span>
+    """
+  end
+
   defp input_equals?(val1, val2) do
     Phoenix.HTML.html_escape(val1) == Phoenix.HTML.html_escape(val2)
   end

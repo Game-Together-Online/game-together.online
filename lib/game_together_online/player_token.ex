@@ -14,7 +14,7 @@ defmodule GameTogetherOnline.PlayerToken do
     field :token, :binary
     belongs_to :player, Player
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

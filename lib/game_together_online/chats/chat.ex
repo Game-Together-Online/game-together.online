@@ -10,9 +10,9 @@ defmodule GameTogetherOnline.Chats.Chat do
   schema "chats" do
     belongs_to :table, Table
 
-    has_many :chat_messages, ChatMessage
+    has_many :chat_messages, ChatMessage, preload_order: [asc: :inserted_at]
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
