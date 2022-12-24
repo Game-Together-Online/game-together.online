@@ -6,7 +6,6 @@ defmodule GameTogetherOnline.ChatMessagesTest do
   describe "chat_messages" do
     alias GameTogetherOnline.ChatMessages.ChatMessage
 
-    import GameTogetherOnline.Administration.ChatMessagesFixtures
     import GameTogetherOnline.Administration.PlayersFixtures
     import GameTogetherOnline.Administration.ChatsFixtures
 
