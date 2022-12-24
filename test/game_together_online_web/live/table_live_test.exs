@@ -73,6 +73,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
     end
 
     test "shows the chat tab by default", %{conn: conn, table: table} do
+      start_supervised!(PresenceServer)
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       index_live
@@ -81,9 +82,13 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
       assert html =~ "some chat message content"
+      assert render(index_live) =~ "joined"
+      assert render(index_live) =~ "left"
     end
 
     test "shows the chat tab when it has been selected", %{conn: conn, table: table} do
+      start_supervised!(PresenceServer)
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
 
       index_live
@@ -92,9 +97,11 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
 
       assert render(index_live) =~ "some chat message content"
 
-      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
+      {:ok, index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
 
       assert html =~ "some chat message content"
+      assert render(index_live) =~ "joined"
+      assert render(index_live) =~ "left"
     end
 
     test "shows the players present tab when it has been selected", %{conn: conn, table: table} do
