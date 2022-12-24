@@ -204,6 +204,17 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLiveTest do
       assert html =~ "No users without a player were found with an email that matches"
     end
 
+    test "allows assigning a user to the player", %{conn: conn} do
+      user = user_fixture()
+      player = player_fixture()
+
+      {:ok, live, html} = live(conn, ~p"/administration/players/#{player}")
+
+      assert live
+             |> element("button", "Assign #{user.email}")
+             |> render_click() =~ user.email
+    end
+
     test "shows the user for the player when there is one", %{conn: conn} do
       user = user_fixture()
       player = player_fixture(%{user_id: user.id})

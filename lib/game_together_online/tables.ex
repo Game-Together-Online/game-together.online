@@ -23,10 +23,10 @@ defmodule GameTogetherOnline.Tables do
       |> Repo.preload(chat: [chat_messages: :player])
 
   def create_table(game_type, options) do
-    table_factory = factory_for_table(game_type)
-    table_factory.create_table(options)
+    table_strategy = strategy_for_table(game_type)
+    table_strategy.create_table(options)
   end
 
-  defp factory_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades
-  defp factory_for_table(%{slug: "spyfall"}), do: GameTogetherOnline.Spyfall
+  defp strategy_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades
+  defp strategy_for_table(%{slug: "spyfall"}), do: GameTogetherOnline.Spyfall
 end

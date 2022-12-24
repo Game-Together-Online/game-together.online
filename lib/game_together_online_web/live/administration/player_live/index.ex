@@ -44,7 +44,6 @@ defmodule GameTogetherOnlineWeb.Administration.PlayerLive.Index do
     {:noreply, assign(socket, :players, list_players())}
   end
 
-  # TODO: Test this
   @impl true
   def handle_info(player, socket) do
     %{players: players} = socket.assigns

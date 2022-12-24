@@ -14,13 +14,13 @@ defmodule GameTogetherOnlineWeb.Administration.UserLive.PlayerFormComponent do
   @impl true
   def render(%{players: [], nickname_filter: ""} = assigns) do
     ~H"""
-    <div class="mx-auto max-w-lg">OOPS! No players found.</div>
+    <div class="mx-auto w-96">OOPS! No players found.</div>
     """
   end
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-lg">
+    <div class="mx-auto w-96">
       <div>
         <div class="text-center">
           <svg

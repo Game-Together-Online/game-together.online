@@ -16,7 +16,6 @@ defmodule GameTogetherOnline.Administration.ChatMessages.ChatMessage do
     timestamps()
   end
 
-  # TODO: Test this
   @doc false
   def changeset(chat_message, attrs) do
     chat_message
