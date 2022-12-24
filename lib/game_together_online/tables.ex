@@ -27,6 +27,12 @@ defmodule GameTogetherOnline.Tables do
     table_strategy.create_table(options)
   end
 
+  def broadcast(id),
+    do:
+      id
+      |> get_table!()
+      |> Updates.broadcast()
+
   defp strategy_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades
   defp strategy_for_table(%{slug: "spyfall"}), do: GameTogetherOnline.Spyfall
   defp strategy_for_table(%{slug: "chess"}), do: GameTogetherOnline.Chess

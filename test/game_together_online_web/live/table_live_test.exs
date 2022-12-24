@@ -90,6 +90,8 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       |> form("#chat_message-form", chat_message: %{content: "some chat message content"})
       |> render_submit()
 
+      assert render(index_live) =~ "some chat message content"
+
       {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
 
       assert html =~ "some chat message content"

@@ -52,6 +52,7 @@ defmodule GameTogetherOnlineWeb.TableLive.Index do
 
     case ChatMessages.create_chat_message(new_chat_message) do
       {:ok, _chat_message} ->
+        Tables.broadcast(table.id)
         {:noreply, assign(socket, chat_message: build_new_chat_message())}
 
       {:error, changeset} ->

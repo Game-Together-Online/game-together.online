@@ -25,10 +25,14 @@ import topbar from "../vendor/topbar"
 // Import our hooks
 import Clipboard from "./clipboard-hook";
 import TimeAgo from "./time-ago-hook";
+import ScrollToBottomOnUpdate from "./scroll-to-bottom-on-update-hook";
+import SubmitOnEnter from "./submit-on-enter-hook";
 
 const Hooks = {
     Clipboard,
-    TimeAgo
+    TimeAgo,
+    ScrollToBottomOnUpdate,
+    SubmitOnEnter
 };
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
