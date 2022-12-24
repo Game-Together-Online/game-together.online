@@ -29,4 +29,5 @@ defmodule GameTogetherOnline.Tables do
 
   defp strategy_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades
   defp strategy_for_table(%{slug: "spyfall"}), do: GameTogetherOnline.Spyfall
+  defp strategy_for_table(%{slug: "chess"}), do: GameTogetherOnline.Chess
 end
