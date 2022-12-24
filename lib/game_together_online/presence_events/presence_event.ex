@@ -1,4 +1,4 @@
-defmodule GameTogetherOnline.Administration.PresenceEvents.PresenceEvent do
+defmodule GameTogetherOnline.PresenceEvents.PresenceEvent do
   use Ecto.Schema
   import Ecto.Changeset
 
