@@ -1,4 +1,4 @@
-defmodule GameTogetherOnlineWeb.LocationLiveTest do
+defmodule GameTogetherOnlineWeb.Administration.LocationLiveTest do
   use GameTogetherOnlineWeb.ConnCase
 
   import Phoenix.LiveViewTest

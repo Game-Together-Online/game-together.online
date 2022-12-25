@@ -1,0 +1,57 @@
+<.header>
+  Listing Nickname change events
+  <:actions>
+    <.link patch={~p"/administration/nickname_change_events/new"}>
+      <.button>New Nickname change event</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="nickname_change_events"
+  rows={@nickname_change_events}
+  row_click={&JS.navigate(~p"/administration/nickname_change_events/#{&1}")}
+>
+  <:col :let={nickname_change_event} label="Original nickname">
+    <%= nickname_change_event.original_nickname %>
+  </:col>
+  <:col :let={nickname_change_event} label="New nickname">
+    <%= nickname_change_event.new_nickname %>
+  </:col>
+  <:action :let={nickname_change_event}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/nickname_change_events/#{nickname_change_event}"}>
+        Show
+      </.link>
+    </div>
+    <.link patch={~p"/administration/nickname_change_events/#{nickname_change_event}/edit"}>
+      Edit
+    </.link>
+  </:action>
+  <:action :let={nickname_change_event}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: nickname_change_event.id})}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="nickname_change_event-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/nickname_change_events")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.NicknameChangeEventLive.FormComponent}
+    id={@nickname_change_event.id || :new}
+    title={@page_title}
+    action={@live_action}
+    nickname_change_event={@nickname_change_event}
+    navigate={~p"/administration/nickname_change_events"}
+  />
+</.modal>
+
+<.back navigate={~p"/administration"}>Back to administration</.back>
