@@ -43,6 +43,15 @@ defmodule GameTogetherOnlineWeb.Router do
         live "/locations/:id/show/edit", LocationLive.Show, :edit
       end
 
+      scope "/nickname_change_events", NicknameChangeEventLive do
+        live "/", Index, :index
+        live "/new", Index, :new
+        live "/:id/edit", Index, :edit
+
+        live "/:id", Show, :show
+        live "/:id/show/edit", Show, :edit
+      end
+
       scope "/presence_events", PresenceEventLive do
         live "/", Index, :index
         live "/new", Index, :new

@@ -1,4 +1,4 @@
-defmodule GameTogetherOnlineWeb.ChatMessageLiveTest do
+defmodule GameTogetherOnlineWeb.Administration.ChatMessageLiveTest do
   use GameTogetherOnlineWeb.ConnCase
 
   import Phoenix.LiveViewTest

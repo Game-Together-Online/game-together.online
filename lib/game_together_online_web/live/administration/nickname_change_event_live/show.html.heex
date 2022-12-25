@@ -1,0 +1,37 @@
+<.header>
+  Nickname change event <%= @nickname_change_event.id %>
+  <:subtitle>This is a nickname_change_event record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/administration/nickname_change_events/#{@nickname_change_event}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Edit nickname_change_event</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Original nickname"><%= @nickname_change_event.original_nickname %></:item>
+  <:item title="New nickname"><%= @nickname_change_event.new_nickname %></:item>
+</.list>
+
+<.back navigate={~p"/administration/nickname_change_events"}>
+  Back to nickname_change_events
+</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="nickname_change_event-modal"
+  show
+  on_cancel={JS.patch(~p"/administration/nickname_change_events/#{@nickname_change_event}")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.NicknameChangeEventLive.FormComponent}
+    id={@nickname_change_event.id}
+    title={@page_title}
+    action={@live_action}
+    nickname_change_event={@nickname_change_event}
+    navigate={~p"/administration/nickname_change_events/#{@nickname_change_event}"}
+  />
+</.modal>

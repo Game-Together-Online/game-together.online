@@ -1,4 +1,4 @@
-defmodule GameTogetherOnlineWeb.PresenceEventLiveTest do
+defmodule GameTogetherOnlineWeb.Administration.PresenceEventLiveTest do
   use GameTogetherOnlineWeb.ConnCase
 
   import Phoenix.LiveViewTest
