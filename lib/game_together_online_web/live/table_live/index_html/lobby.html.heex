@@ -94,12 +94,12 @@
   :if={@show_edit_nickname_modal}
   id="change-nickname-modal"
   show
-  on_cancel={JS.navigate(~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}")}
+  on_cancel={JS.patch(~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}")}
 >
   <.live_component
     module={GameTogetherOnlineWeb.TableLive.ChangeNicknameComponent}
     id={@current_player.id}
     player={@current_player}
-    navigate={~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}"}
+    patch={~p"/tables/#{@table.id}/lobby?tab=#{@current_tab}"}
   />
 </.modal>

@@ -42,7 +42,6 @@ defmodule GameTogetherOnline.Tables do
       |> get_table!()
       |> Updates.broadcast()
 
-  # TODO: Test this
   def broadcast(table_ids) when is_list(table_ids),
     do:
       Table

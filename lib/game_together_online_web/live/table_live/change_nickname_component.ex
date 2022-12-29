@@ -56,7 +56,7 @@ defmodule GameTogetherOnlineWeb.TableLive.ChangeNicknameComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Nickname updated successfully")
-         |> push_navigate(to: socket.assigns.navigate)}
+         |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
