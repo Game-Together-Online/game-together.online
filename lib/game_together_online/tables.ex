@@ -36,11 +36,22 @@ defmodule GameTogetherOnline.Tables do
     table_strategy.create_table(options)
   end
 
-  def broadcast(id),
+  def broadcast(id) when is_binary(id),
     do:
       id
       |> get_table!()
       |> Updates.broadcast()
+
+  # TODO: Test this
+  def broadcast(table_ids) when is_list(table_ids),
+    do:
+      Table
+      |> where([table], table.id in ^table_ids)
+      |> Repo.all()
+      |> Repo.preload(:game_type)
+      |> Repo.preload(:players_present)
+      |> Repo.preload(chat: [presence_events: :player, chat_messages: :player])
+      |> Enum.each(&Updates.broadcast/1)
 
   defp strategy_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades
   defp strategy_for_table(%{slug: "spyfall"}), do: GameTogetherOnline.Spyfall

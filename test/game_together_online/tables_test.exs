@@ -119,6 +119,22 @@ defmodule GameTogetherOnline.TablesTest do
     end
   end
 
+  test "broadcast/1 broadcasts multiple table updates" do
+    game_type = game_type_fixture()
+    {:ok, first_table} = Tables.create_table(game_type, %{})
+    {:ok, second_table} = Tables.create_table(game_type, %{})
+
+    first_table_id = first_table.id
+    second_table_id = second_table.id
+
+    Tables.subscribe()
+
+    Tables.broadcast([first_table_id, second_table_id])
+
+    assert_receive %{id: ^first_table_id}
+    assert_receive %{id: ^second_table_id}
+  end
+
   test "subscribe/1 subscibes to a table id" do
     game_type = game_type_fixture()
     {:ok, table} = Tables.create_table(game_type, %{})
