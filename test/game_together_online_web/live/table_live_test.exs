@@ -69,13 +69,11 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
              |> form("#change-nickname-form", player: %{nickname: ""})
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        index_live
-        |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/tables/#{table.id}/lobby?tab=chat")
+      index_live
+      |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
+      |> render_submit()
 
-      assert html =~ "Nickname updated successfully"
+      assert_patch(index_live, ~p"/tables/#{table.id}/lobby?tab=chat")
 
       [nickname_change_event] = NicknameChangeEvents.list_nickname_change_events()
       assert nickname_change_event.new_nickname == "New Nickname"
@@ -149,13 +147,10 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert index_live |> element("a", "Change Your Nickname") |> render_click() =~
                "Save"
 
-      {:ok, _, html} =
-        index_live
-        |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/tables/#{table.id}/lobby?tab=players_present")
-
-      refute html =~ "Current tab: chat"
+      refute index_live
+             |> form("#change-nickname-form", player: %{nickname: "New Nickname"})
+             |> render_submit() =~
+               "Current tab: chat"
     end
 
     test "switches to the players present tab", %{conn: conn, table: table} do
