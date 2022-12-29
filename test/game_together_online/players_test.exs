@@ -13,6 +13,33 @@ defmodule GameTogetherOnline.PlayersTest do
 
   alias GameTogetherOnline.Administration
 
+  test "update_player/2 broadcasts the table when the player changes their name and is at a table" do
+    start_supervised!(PresenceServer)
+    game_type = GameTypesFixtures.game_type_fixture(%{slug: "chess"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    player = PlayersFixtures.player_fixture(%{nickname: "beetle bailey"})
+    Tables.subscribe(table.id)
+    Tables.track_presence(table, player)
+
+    assert_receive _table_update
+
+    {:ok, _updated_player} = Players.update_player(player, %{"nickname" => "new player name123"})
+
+    assert_receive table_update
+    assert table_update.id == table.id
+  end
+
+  test "update_player/2 does not broadcast the table when the player does not change their name and is at a table" do
+    start_supervised!(PresenceServer)
+    game_type = GameTypesFixtures.game_type_fixture(%{slug: "chess"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    player = PlayersFixtures.player_fixture(%{nickname: "beetle bailey"})
+    Tables.subscribe(table.id)
+    {:ok, _updated_player} = Players.update_player(player, %{"nickname" => "new player name123"})
+
+    refute_receive _table_update
+  end
+
   test "update_player/2 creates chat events when the player changes their name and is at a table" do
     start_supervised!(PresenceServer)
     game_type = GameTypesFixtures.game_type_fixture(%{slug: "chess"})

@@ -56,12 +56,15 @@ defmodule GameTogetherOnline.Players do
       DateTime.utc_now()
       |> DateTime.truncate(:second)
 
-    to_insert =
+    tables_with_player =
       player
       |> Tables.with_player()
       |> preload(:chat)
       |> repo.all()
-      |> Enum.map(
+
+    to_insert =
+      Enum.map(
+        tables_with_player,
         &%{
           chat_id: &1.chat.id,
           nickname_change_event_id: nickname_change_event.id,
@@ -72,6 +75,10 @@ defmodule GameTogetherOnline.Players do
 
     {_number_inserted, nickname_change_chat_events} =
       Repo.insert_all(NicknameChangeChatEvent, to_insert, returning: true)
+
+    tables_with_player
+    |> Enum.map(& &1.id)
+    |> Tables.broadcast()
 
     {:ok, nickname_change_chat_events}
   end
