@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.Administration.NicknameChangeEvents.NicknameChangeE
     field :original_nickname, :string
     field :player_id, :binary_id
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

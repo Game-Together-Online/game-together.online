@@ -5,10 +5,53 @@ defmodule GameTogetherOnline.PlayersTest do
   alias GameTogetherOnline.Players.Player
   alias GameTogetherOnline.Administration.NicknameChangeEvents
   alias GameTogetherOnline.Administration.PlayersFixtures
+  alias GameTogetherOnline.Administration.GameTypesFixtures
+  alias GameTogetherOnline.Tables
+  alias GameTogetherOnline.Tables.PresenceServer
+  alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeChatEvent
+  alias GameTogetherOnline.Repo
+
   alias GameTogetherOnline.Administration
 
+  test "update_player/2 creates chat events when the player changes their name and is at a table" do
+    start_supervised!(PresenceServer)
+    game_type = GameTypesFixtures.game_type_fixture(%{slug: "chess"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    player = PlayersFixtures.player_fixture(%{nickname: "beetle bailey"})
+    Tables.subscribe(table.id)
+    Tables.track_presence(table, player)
+    assert_receive _table_update
+
+    {:ok, _updated_player} = Players.update_player(player, %{"nickname" => "new player name123"})
+
+    [nickname_change_chat_event] = Repo.all(NicknameChangeChatEvent)
+
+    assert nickname_change_chat_event.chat_id == table.chat.id
+  end
+
+  test "update_player/2 does not create chat events when the player does not change their name and is at a table" do
+    start_supervised!(PresenceServer)
+    game_type = GameTypesFixtures.game_type_fixture(%{slug: "chess"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    player = PlayersFixtures.player_fixture(%{nickname: "beetle bailey"})
+    Tables.subscribe(table.id)
+    Tables.track_presence(table, player)
+    assert_receive _table_update
+
+    {:ok, _updated_player} = Players.update_player(player, %{"nickname" => "beetle bailey"})
+
+    assert [] = Repo.all(NicknameChangeChatEvent)
+  end
+
+  test "update_player/2 does not create create chat events when the player changes their name and is not at a table" do
+    player = PlayersFixtures.player_fixture(%{nickname: "beetle bailey"})
+    {:ok, _updated_player} = Players.update_player(player, %{"nickname" => "some other nickname"})
+
+    assert [] = Repo.all(NicknameChangeChatEvent)
+  end
+
   test "create_player/1 with valid data creates a role" do
-    valid_attrs = %{nickname: "some nickname"}
+    valid_attrs = %{"nickname" => "some nickname"}
 
     assert {:ok, %Player{} = player} = Players.create_player(valid_attrs)
     assert player.nickname == "some nickname"

@@ -3,7 +3,11 @@ defmodule GameTogetherOnline.Players do
   alias Ecto.Multi
   alias GameTogetherOnline.PlayerToken
   alias GameTogetherOnline.Players.Player
+  alias GameTogetherOnline.Tables
   alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeEvent
+  alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeChatEvent
+
+  import Ecto.Query
 
   def create_player(attrs) do
     %Player{}
@@ -15,6 +19,7 @@ defmodule GameTogetherOnline.Players do
     Multi.new()
     |> Multi.update(:player, Player.changeset(player, attrs))
     |> maybe_insert_nickname_change_event(player, attrs)
+    |> maybe_add_nickname_changes_to_chats()
     |> Repo.transaction()
     |> extract_the_player_update_results()
   end
@@ -38,6 +43,40 @@ defmodule GameTogetherOnline.Players do
       })
     )
   end
+
+  defp maybe_add_nickname_changes_to_chats(multi) do
+    Multi.run(multi, :nickname_change_chat_events, &maybe_add_nickname_changes_to_chats/2)
+  end
+
+  defp maybe_add_nickname_changes_to_chats(repo, %{
+         player: player,
+         nickname_change_event: nickname_change_event
+       }) do
+    now =
+      DateTime.utc_now()
+      |> DateTime.truncate(:second)
+
+    to_insert =
+      player
+      |> Tables.with_player()
+      |> preload(:chat)
+      |> repo.all()
+      |> Enum.map(
+        &%{
+          chat_id: &1.chat.id,
+          nickname_change_event_id: nickname_change_event.id,
+          inserted_at: now,
+          updated_at: now
+        }
+      )
+
+    {_number_inserted, nickname_change_chat_events} =
+      Repo.insert_all(NicknameChangeChatEvent, to_insert, returning: true)
+
+    {:ok, nickname_change_chat_events}
+  end
+
+  defp maybe_add_nickname_changes_to_chats(_repo, _changes_so_far), do: {:ok, nil}
 
   def change_player(%Player{} = player, attrs \\ %{}) do
     Player.changeset(player, attrs)

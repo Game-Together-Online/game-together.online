@@ -4,11 +4,33 @@ defmodule GameTogetherOnline.TablesTest do
   alias GameTogetherOnline.Administration.TablesFixtures
   alias GameTogetherOnline.Tables
   alias GameTogetherOnline.Tables.Presence
+  alias GameTogetherOnline.Tables.PresenceServer
   alias GameTogetherOnline.Administration
   alias GameTogetherOnline.Administration.SpyfallGames
+  alias GameTogetherOnline.Administration.PlayersFixtures
   alias Ecto.UUID
 
   import GameTogetherOnline.GameTypesFixtures
+
+  test "with_player/1 returns the tables where the player is present" do
+    start_supervised!(PresenceServer)
+    player = PlayersFixtures.player_fixture()
+    PlayersFixtures.player_fixture()
+    game_type = game_type_fixture()
+    {:ok, table} = Tables.create_table(game_type, %{})
+    Tables.subscribe(table.id)
+    {:ok, _other_table} = Tables.create_table(game_type, %{})
+    Tables.track_presence(table, player)
+
+    assert_receive _table
+
+    [table_with_player] =
+      player
+      |> Tables.with_player()
+      |> Repo.all()
+
+    assert table.id == table_with_player.id
+  end
 
   test "get_table!/1 returns the table with given id" do
     table = TablesFixtures.table_fixture()
