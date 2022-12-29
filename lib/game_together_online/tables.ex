@@ -8,11 +8,20 @@ defmodule GameTogetherOnline.Tables do
   alias GameTogetherOnline.Tables.Presence
   alias GameTogetherOnline.Tables.Updates
 
+  import Ecto.Query
+
   defdelegate subscribe(), to: Updates
   defdelegate subscribe(table), to: Updates
 
   defdelegate track_presence(table, player), to: Presence, as: :track
   defdelegate untrack_presence(table, player), to: Presence, as: :untrack
+
+  def with_player(%{id: player_id}) do
+    from table in Table,
+      join: table_presence in assoc(table, :table_presences),
+      where: table_presence.player_id == ^player_id,
+      select: table
+  end
 
   def get_table!(id),
     do:

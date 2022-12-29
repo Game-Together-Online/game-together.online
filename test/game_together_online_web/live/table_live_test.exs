@@ -8,6 +8,8 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   alias GameTogetherOnline.Administration.GameTypesFixtures
   alias GameTogetherOnline.Administration.ChatMessages
   alias GameTogetherOnline.Administration.NicknameChangeEvents
+  alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeChatEvent
+  alias GameTogetherOnline.Repo
   alias Ecto.UUID
 
   setup :create_table
@@ -53,6 +55,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
     end
 
     test "allows players to update their nickname", %{conn: conn, table: table} do
+      start_supervised!(PresenceServer)
       conn = get(conn, ~p"/tables/#{table.id}/lobby")
       %{current_player: current_player} = conn.assigns
       {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
@@ -78,6 +81,9 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert nickname_change_event.new_nickname == "New Nickname"
       assert nickname_change_event.original_nickname == current_player.nickname
       assert nickname_change_event.player_id == current_player.id
+
+      [nickname_change_chat_event] = Repo.all(NicknameChangeChatEvent)
+      assert nickname_change_chat_event.nickname_change_event_id == nickname_change_event.id
     end
 
     test "shows the chat tab by default", %{conn: conn, table: table} do
