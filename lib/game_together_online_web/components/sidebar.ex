@@ -3,6 +3,7 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
 
   alias GameTogetherOnline.ChatMessages.ChatMessage
   alias GameTogetherOnline.PresenceEvents.PresenceEvent
+  alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeChatEvent
 
   @impl true
   def render(assigns) do
@@ -43,7 +44,11 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
       assign(
         assigns,
         :chat_events,
-        Enum.sort_by(assigns.chat.chat_messages ++ assigns.chat.presence_events, & &1.inserted_at)
+        Enum.sort_by(
+          assigns.chat.chat_messages ++
+            assigns.chat.presence_events ++ assigns.chat.nickname_change_chat_events,
+          & &1.inserted_at
+        )
       )
 
     ~H"""
@@ -79,6 +84,70 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
   defp chat_event(%{event: %PresenceEvent{}} = assigns) do
     ~H"""
     <.presence_event chat_message={@event} last={@last} />
+    """
+  end
+
+  defp chat_event(%{event: %NicknameChangeChatEvent{}} = assigns) do
+    ~H"""
+    <.nickname_change_chat_event chat_message={@event} last={@last} />
+    """
+  end
+
+  # TODO: Test this
+  defp nickname_change_chat_event(assigns) do
+    ~H"""
+    <li>
+      <div class="relative pb-8">
+        <span
+          class={["absolute top-5 left-5 -ml-px h-full w-0.5", if(@last, do: "", else: "bg-gray-200")]}
+          aria-hidden="true"
+        >
+        </span>
+        <div class="relative flex items-start space-x-3">
+          <div>
+            <div class="relative px-1">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-gray-50">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="min-w-0 flex-1 py-0">
+            <div class="text-sm leading-8 text-gray-500">
+              <span class="mr-0.5">
+                <a href="#" class="font-medium text-gray-900">
+                  <%= @chat_message.nickname_change_event.original_nickname %>
+                </a>
+                changed their nickname to
+                <a href="#" class="font-medium text-gray-900">
+                  <%= @chat_message.nickname_change_event.new_nickname %>
+                </a>
+              </span>
+              <div class="whitespace-nowrap">
+                <.time_ago
+                  timestamp={@chat_message.inserted_at}
+                  id={"player-pressence-inserted-at-#{@chat_message.id}"}
+                >
+                  --
+                </.time_ago>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
     """
   end
 
@@ -121,7 +190,7 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
               <span class="whitespace-nowrap">
                 <.time_ago
                   timestamp={@chat_message.inserted_at}
-                  id={"player-pressnce-inserted-at-#{@chat_message.id}"}
+                  id={"player-pressence-inserted-at-#{@chat_message.id}"}
                 >
                   --
                 </.time_ago>

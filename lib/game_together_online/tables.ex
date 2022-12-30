@@ -27,9 +27,15 @@ defmodule GameTogetherOnline.Tables do
     do:
       Table
       |> Repo.get!(id)
-      |> Repo.preload(:game_type)
-      |> Repo.preload(:players_present)
-      |> Repo.preload(chat: [presence_events: :player, chat_messages: :player])
+      |> Repo.preload(
+        players_present: [],
+        game_type: [],
+        chat: [
+          presence_events: :player,
+          chat_messages: :player,
+          nickname_change_chat_events: :nickname_change_event
+        ]
+      )
 
   def create_table(game_type, options) do
     table_strategy = strategy_for_table(game_type)
@@ -47,9 +53,15 @@ defmodule GameTogetherOnline.Tables do
       Table
       |> where([table], table.id in ^table_ids)
       |> Repo.all()
-      |> Repo.preload(:game_type)
-      |> Repo.preload(:players_present)
-      |> Repo.preload(chat: [presence_events: :player, chat_messages: :player])
+      |> Repo.preload(
+        players_present: [],
+        game_type: [],
+        chat: [
+          presence_events: :player,
+          chat_messages: :player,
+          nickname_change_chat_events: :nickname_change_event
+        ]
+      )
       |> Enum.each(&Updates.broadcast/1)
 
   defp strategy_for_table(%{slug: "spades"}), do: GameTogetherOnline.Spades

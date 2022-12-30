@@ -2,12 +2,14 @@ defmodule GameTogetherOnline.NicknameChangeEvents.NicknameChangeEvent do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias GameTogetherOnline.Players.Player
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "nickname_change_events" do
     field :new_nickname, :string
     field :original_nickname, :string
-    field :player_id, :binary_id
+    belongs_to :player, Player
 
     timestamps(type: :utc_datetime)
   end
