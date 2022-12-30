@@ -5,6 +5,7 @@ defmodule GameTogetherOnline.Chats.Chat do
   alias GameTogetherOnline.Administration.Tables.Table
   alias GameTogetherOnline.ChatMessages.ChatMessage
   alias GameTogetherOnline.PresenceEvents.PresenceEvent
+  alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeChatEvent
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -13,6 +14,7 @@ defmodule GameTogetherOnline.Chats.Chat do
 
     has_many :chat_messages, ChatMessage
     has_many :presence_events, PresenceEvent
+    has_many :nickname_change_chat_events, NicknameChangeChatEvent
 
     timestamps(type: :utc_datetime)
   end

@@ -102,10 +102,16 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
   defp load_tables(table_ids) do
     Table
     |> where([t], t.id in ^table_ids)
-    |> preload(:players_present)
-    |> preload(:game_type)
-    |> preload(chat: [chat_messages: :player, presence_events: :player])
     |> Repo.all()
+    |> Repo.preload(
+      players_present: [],
+      game_type: [],
+      chat: [
+        presence_events: :player,
+        chat_messages: :player,
+        nickname_change_chat_events: :nickname_change_event
+      ]
+    )
   end
 
   defp broadcast_table_update(table), do: Updates.broadcast(table)
