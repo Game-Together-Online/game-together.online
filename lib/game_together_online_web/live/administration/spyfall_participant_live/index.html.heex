@@ -1,0 +1,52 @@
+<.header>
+  Listing Spyfall participants
+  <:actions>
+    <.link patch={~p"/administration/spyfall_participants/new"}>
+      <.button>New Spyfall participant</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="spyfall_participants"
+  rows={@spyfall_participants}
+  row_click={&JS.navigate(~p"/administration/spyfall_participants/#{&1}")}
+>
+  <:col :let={spyfall_participant} label="Ready to start">
+    <%= spyfall_participant.ready_to_start %>
+  </:col>
+  <:action :let={spyfall_participant}>
+    <div class="sr-only">
+      <.link navigate={~p"/administration/spyfall_participants/#{spyfall_participant}"}>
+        Show
+      </.link>
+    </div>
+    <.link patch={~p"/administration/spyfall_participants/#{spyfall_participant}/edit"}>
+      Edit
+    </.link>
+  </:action>
+  <:action :let={spyfall_participant}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: spyfall_participant.id})}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="spyfall_participant-modal"
+  show
+  on_cancel={JS.navigate(~p"/administration/spyfall_participants")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.SpyfallParticipantLive.FormComponent}
+    id={@spyfall_participant.id || :new}
+    title={@page_title}
+    action={@live_action}
+    spyfall_participant={@spyfall_participant}
+    navigate={~p"/administration/spyfall_participants"}
+  />
+</.modal>

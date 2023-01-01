@@ -97,7 +97,7 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
   defp nickname_change_chat_event(assigns) do
     ~H"""
     <li>
-      <div class="relative pb-8">
+      <div class={["relative", if(@last, do: "", else: "pb-8")]}>
         <span
           class={["absolute top-5 left-5 -ml-px h-full w-0.5", if(@last, do: "", else: "bg-gray-200")]}
           aria-hidden="true"
@@ -154,7 +154,7 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
   defp presence_event(assigns) do
     ~H"""
     <li>
-      <div class="relative pb-8">
+      <div class={["relative", if(@last, do: "", else: "pb-8")]}>
         <span
           class={[
             "absolute top-5 left-5 -ml-px h-full w-0.5",
@@ -240,7 +240,7 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
   defp chat_message(assigns) do
     ~H"""
     <li>
-      <div class="relative pb-8">
+      <div class={["relative", if(@last, do: "", else: "pb-8")]}>
         <span
           class={[
             "absolute top-5 left-5 -ml-px h-full w-0.5",

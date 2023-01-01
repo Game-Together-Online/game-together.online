@@ -34,6 +34,15 @@ defmodule GameTogetherOnlineWeb.Router do
     scope "/administration", Administration do
       get "/", PageController, :home
 
+      scope "/spyfall_participants", SpyfallParticipantLive do
+        live "/", Index, :index
+        live "/new", Index, :new
+        live "/:id/edit", Index, :edit
+
+        live "/:id", Show, :show
+        live "/:id/show/edit", Show, :edit
+      end
+
       scope "/spyfall", Spyfall do
         live "/locations", LocationLive.Index, :index
         live "/locations/new", LocationLive.Index, :new

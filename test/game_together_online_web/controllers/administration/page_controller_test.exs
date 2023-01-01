@@ -22,5 +22,7 @@ defmodule GameTogetherOnlineWeb.Administration.PageControllerTest do
     assert html_response(conn, 200) =~ ~p"/administration/spyfall/games"
 
     assert html_response(conn, 200) =~ ~p"/administration/nickname_change_events"
+
+    assert html_response(conn, 200) =~ ~p"/administration/spyfall_participants"
   end
 end
