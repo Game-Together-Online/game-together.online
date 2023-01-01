@@ -1,0 +1,34 @@
+<.header>
+  Spyfall participant <%= @spyfall_participant.id %>
+  <:subtitle>This is a spyfall_participant record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/administration/spyfall_participants/#{@spyfall_participant}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.button>Edit spyfall_participant</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Ready to start"><%= @spyfall_participant.ready_to_start %></:item>
+</.list>
+
+<.back navigate={~p"/administration/spyfall_participants"}>Back to spyfall_participants</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="spyfall_participant-modal"
+  show
+  on_cancel={JS.patch(~p"/administration/spyfall_participants/#{@spyfall_participant}")}
+>
+  <.live_component
+    module={GameTogetherOnlineWeb.Administration.SpyfallParticipantLive.FormComponent}
+    id={@spyfall_participant.id}
+    title={@page_title}
+    action={@live_action}
+    spyfall_participant={@spyfall_participant}
+    navigate={~p"/administration/spyfall_participants/#{@spyfall_participant}"}
+  />
+</.modal>
