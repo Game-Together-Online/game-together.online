@@ -105,6 +105,7 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
     |> Repo.all()
     |> Repo.preload(
       players_present: [],
+      spyfall_game: [spyfall_participants: :player],
       game_type: [],
       chat: [
         presence_events: :player,
