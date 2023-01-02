@@ -1,4 +1,4 @@
-defmodule GameTogetherOnline.Administration.SpyfallParticipants.SpyfallParticipant do
+defmodule GameTogetherOnline.SpyfallParticipants.SpyfallParticipant do
   use Ecto.Schema
   import Ecto.Changeset
 

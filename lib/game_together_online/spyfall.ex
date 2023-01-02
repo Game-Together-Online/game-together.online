@@ -1,4 +1,6 @@
 defmodule GameTogetherOnline.Spyfall do
+  @behaviour GameTogetherOnline.GameStrategy
+
   @moduledoc """
   The Spyfall context.
   """
@@ -9,7 +11,7 @@ defmodule GameTogetherOnline.Spyfall do
 
   @game_type_slug "spyfall"
 
-  def create_table(_options \\ %{}) do
+  def create_table(_options) do
     %Table{}
     |> Table.changeset(%{
       status: "game-pending",
@@ -18,6 +20,11 @@ defmodule GameTogetherOnline.Spyfall do
       spyfall_game: %{}
     })
     |> Repo.insert()
+  end
+
+  def load_game_specific_data(table) do
+    table
+    |> Repo.preload(spyfall_game: [spyfall_participants: :player])
   end
 
   defp load_game_type_id do

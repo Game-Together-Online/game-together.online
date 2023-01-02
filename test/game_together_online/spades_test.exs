@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.SpadesTest do
 
   test "create_table/1 creates a spades table" do
     game_type = game_type_fixture(%{slug: "spades"})
-    {:ok, table} = Spades.create_table()
+    {:ok, table} = Spades.create_table(%{})
     [created_table] = Tables.list_tables()
 
     assert table.id == created_table.id

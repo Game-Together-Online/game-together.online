@@ -1,4 +1,5 @@
 defmodule GameTogetherOnline.Chess do
+  @behaviour GameTogetherOnline.GameStrategy
   @moduledoc """
   The Chess context.
   """
@@ -9,7 +10,9 @@ defmodule GameTogetherOnline.Chess do
 
   @game_type_slug "chess"
 
-  def create_table(_options \\ %{}) do
+  def load_game_specific_data(table), do: table
+
+  def create_table(_options) do
     %Table{}
     |> Table.changeset(%{status: "game-pending", game_type_id: load_game_type_id(), chat: %{}})
     |> Repo.insert()
