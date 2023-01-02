@@ -8,6 +8,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   alias GameTogetherOnline.Administration.GameTypesFixtures
   alias GameTogetherOnline.Administration.ChatMessages
   alias GameTogetherOnline.Administration.NicknameChangeEvents
+  alias GameTogetherOnline.Administration.SpyfallParticipants
   alias GameTogetherOnline.NicknameChangeEvents.NicknameChangeChatEvent
   alias GameTogetherOnline.Repo
   alias Ecto.UUID
@@ -15,6 +16,23 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   setup :create_table
 
   describe "Lobby" do
+    test "creates a spyfall participant when the join the game button is clicked", %{
+      conn: conn,
+      table: table
+    } do
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
+      start_supervised(PresenceServer)
+      Tables.subscribe(table.id)
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live |> element("button", "Join The Game") |> render_click()
+
+      [spyfall_participant] = SpyfallParticipants.list_spyfall_participants()
+
+      assert spyfall_participant.spyfall_game_id == table.spyfall_game.id
+      assert spyfall_participant.player_id == conn.assigns.current_player.id
+    end
+
     test "shows the edit nickname modal when the edit_nickname query param is present", %{
       conn: conn,
       table: table

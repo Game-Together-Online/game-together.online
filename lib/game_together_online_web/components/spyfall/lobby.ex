@@ -2,6 +2,21 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
   use GameTogetherOnlineWeb, :live_component
 
   alias GameTogetherOnlineWeb.Components.LobbyHeader
+  alias GameTogetherOnline.Tables
+  alias GameTogetherOnline.SpyfallParticipants
+
+  def handle_event("add_user_to_game", _params, socket) do
+    %{table: table, current_player: current_player} = socket.assigns
+    %{spyfall_game: spyfall_game} = table
+
+    SpyfallParticipants.create_spyfall_participant(%{
+      spyfall_game_id: spyfall_game.id,
+      player_id: current_player.id
+    })
+
+    Tables.broadcast(table.id)
+    {:noreply, socket}
+  end
 
   def render(assigns) do
     assigns =
@@ -49,6 +64,8 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
               <% else %>
                 <button
                   type="button"
+                  phx-click="add_user_to_game"
+                  phx-target={@myself}
                   class="w-full rounded-md border border-transparent bg-indigo-600 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                 >
                   Join The Game

@@ -15,7 +15,12 @@ defmodule GameTogetherOnlineWeb.Live.Components.Spyfall.LobbyTest do
     {:ok, table} = Tables.create_table(spyfall, %{})
     table = Tables.get_table!(table.id)
 
-    assert render_component(Lobby, table: table, current_player: player, current_tab: "chat") =~
+    assert render_component(Lobby,
+             table: table,
+             current_player: player,
+             current_tab: "chat",
+             myself: nil
+           ) =~
              table.id
   end
 
@@ -27,7 +32,12 @@ defmodule GameTogetherOnlineWeb.Live.Components.Spyfall.LobbyTest do
     table = Tables.get_table!(table.id)
 
     spyfall_lobby =
-      render_component(Lobby, table: table, current_player: player, current_tab: "chat")
+      render_component(Lobby,
+        table: table,
+        current_player: player,
+        current_tab: "chat",
+        myself: nil
+      )
 
     assert spyfall_lobby =~ "Join The Game"
     refute spyfall_lobby =~ "Leave The Game"
@@ -47,7 +57,12 @@ defmodule GameTogetherOnlineWeb.Live.Components.Spyfall.LobbyTest do
     table = Tables.get_table!(table.id)
 
     spyfall_lobby =
-      render_component(Lobby, table: table, current_player: player, current_tab: "chat")
+      render_component(Lobby,
+        table: table,
+        current_player: player,
+        current_tab: "chat",
+        myself: nil
+      )
 
     refute spyfall_lobby =~ "Join The Game"
     assert spyfall_lobby =~ "Leave The Game"
