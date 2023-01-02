@@ -9,7 +9,7 @@ defmodule GameTogetherOnline.ChessTest do
 
   test "create_table/1 creates a chess table" do
     game_type = game_type_fixture(%{slug: "chess"})
-    {:ok, table} = Chess.create_table()
+    {:ok, table} = Chess.create_table(%{})
     [created_table] = Tables.list_tables()
 
     assert table.id == created_table.id

@@ -3,11 +3,14 @@ defmodule GameTogetherOnline.SpyfallGames.SpyfallGame do
   import Ecto.Changeset
 
   alias GameTogetherOnline.Tables.Table
+  alias GameTogetherOnline.SpyfallParticipants.SpyfallParticipant
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "spyfall_games" do
     belongs_to :table, Table
+
+    has_many :spyfall_participants, SpyfallParticipant
 
     timestamps(type: :utc_datetime)
   end

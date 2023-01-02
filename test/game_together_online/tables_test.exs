@@ -43,6 +43,14 @@ defmodule GameTogetherOnline.TablesTest do
     assert_raise Ecto.NoResultsError, fn -> Tables.get_table!(UUID.generate()) end
   end
 
+  test "get_table!/1 includes the spyfall data for spyfall tables" do
+    game_type = game_type_fixture(%{slug: "spyfall"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    table_with_game_specific_data = Tables.get_table!(table.id)
+
+    assert %{spyfall_participants: []} = table_with_game_specific_data.spyfall_game
+  end
+
   test "create_table/2 creates spades tables" do
     game_type = game_type_fixture(%{slug: "spades"})
     {:ok, table} = Tables.create_table(game_type, %{})
@@ -117,6 +125,16 @@ defmodule GameTogetherOnline.TablesTest do
       assert player_id == player.id
       assert table_id == table.id
     end
+  end
+
+  test "broadcast/1 includes spyfall data in multiple table updates" do
+    game_type = game_type_fixture(%{slug: "spyfall"})
+    {:ok, table} = Tables.create_table(game_type, %{})
+    Tables.subscribe(table.id)
+    Tables.broadcast([table.id])
+
+    assert_receive received_table
+    assert %{spyfall_participants: []} = received_table.spyfall_game
   end
 
   test "broadcast/1 broadcasts multiple table updates" do
