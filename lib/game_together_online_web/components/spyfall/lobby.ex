@@ -4,6 +4,10 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
   alias GameTogetherOnlineWeb.Components.LobbyHeader
 
   def render(assigns) do
+    assigns =
+      assigns
+      |> set_current_player_has_joined()
+
     ~H"""
     <div>
       <.live_component
@@ -35,12 +39,21 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
             </dl>
 
             <div class="mt-6">
-              <button
-                type="button"
-                class="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              >
-                Join The Game
-              </button>
+              <%= if @current_player_has_joined do %>
+                <button
+                  type="button"
+                  class="w-full items-center rounded-md border border-transparent bg-indigo-100 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Leave The Game
+                </button>
+              <% else %>
+                <button
+                  type="button"
+                  class="w-full rounded-md border border-transparent bg-indigo-600 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                >
+                  Join The Game
+                </button>
+              <% end %>
             </div>
           </div>
         </div>
@@ -51,5 +64,18 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
       </div>
     </div>
     """
+  end
+
+  defp set_current_player_has_joined(assigns) do
+    %{
+      current_player: %{id: current_player_id},
+      table: %{spyfall_game: %{spyfall_participants: spyfall_participants}}
+    } = assigns
+
+    assign(
+      assigns,
+      :current_player_has_joined,
+      Enum.any?(spyfall_participants, &(&1.player_id == current_player_id))
+    )
   end
 end

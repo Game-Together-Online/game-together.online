@@ -183,6 +183,7 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
     def create_table(_) do
       spyfall_game_type = GameTypesFixtures.game_type_fixture(%{slug: "spyfall"})
       {:ok, table} = Tables.create_table(spyfall_game_type, %{})
+      table = Tables.get_table!(table.id)
       {:ok, %{table: table}}
     end
   end
