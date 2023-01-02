@@ -3,10 +3,9 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
   import Ecto.Query
 
   alias GameTogetherOnline.Repo
+  alias GameTogetherOnline.Tables
   alias GameTogetherOnline.Tables.Presence
-  alias GameTogetherOnline.Tables.Table
   alias GameTogetherOnline.Chats.Chat
-  alias GameTogetherOnline.Tables.Updates
   alias GameTogetherOnline.Tables.TablePresence
   alias GameTogetherOnline.PresenceEvents.PresenceEvent
 
@@ -89,8 +88,7 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
     (join_metas ++ leaves_metas)
     |> Enum.map(& &1.table_id)
     |> Enum.uniq()
-    |> load_tables()
-    |> Enum.each(&broadcast_table_update/1)
+    |> Tables.broadcast()
   end
 
   defp load_chats(table_ids) do
@@ -98,24 +96,6 @@ defmodule GameTogetherOnline.Tables.PresenceServer do
     |> where([c], c.table_id in ^table_ids)
     |> Repo.all()
   end
-
-  defp load_tables(table_ids) do
-    Table
-    |> where([t], t.id in ^table_ids)
-    |> Repo.all()
-    |> Repo.preload(
-      players_present: [],
-      spyfall_game: [spyfall_participants: :player],
-      game_type: [],
-      chat: [
-        presence_events: :player,
-        chat_messages: :player,
-        nickname_change_chat_events: :nickname_change_event
-      ]
-    )
-  end
-
-  defp broadcast_table_update(table), do: Updates.broadcast(table)
 
   defp insert_joins(joins) do
     joins
