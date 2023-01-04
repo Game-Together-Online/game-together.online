@@ -2,6 +2,7 @@ defmodule GameTogetherOnline.SpyfallParticipantsTest do
   use GameTogetherOnline.DataCase
 
   alias GameTogetherOnline.SpyfallParticipants
+  alias GameTogetherOnline.Repo
 
   describe "spyfall_participants" do
     alias GameTogetherOnline.SpyfallParticipants.SpyfallParticipant
@@ -11,6 +12,27 @@ defmodule GameTogetherOnline.SpyfallParticipantsTest do
     alias GameTogetherOnline.Administration.TablesFixtures
 
     @invalid_attrs %{ready_to_start: nil}
+
+    test "delete_spyfall_participant_by_game_and_player/2 deletes any matching participants" do
+      player = PlayersFixtures.player_fixture()
+      table = TablesFixtures.table_fixture()
+      spyfall_game = SpyfallGamesFixtures.spyfall_game_fixture(%{table_id: table.id})
+
+      valid_attrs = %{
+        ready_to_start: true,
+        player_id: player.id,
+        spyfall_game_id: spyfall_game.id
+      }
+
+      {:ok, %SpyfallParticipant{}} = SpyfallParticipants.create_spyfall_participant(valid_attrs)
+
+      SpyfallParticipants.delete_spyfall_participant_by_game_and_player(
+        spyfall_game.id,
+        player.id
+      )
+
+      assert [] == Repo.all(SpyfallParticipant)
+    end
 
     test "create_spyfall_participant/1 with valid data creates a spyfall_participant" do
       player = PlayersFixtures.player_fixture()

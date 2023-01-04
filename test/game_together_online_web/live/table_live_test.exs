@@ -16,6 +16,21 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   setup :create_table
 
   describe "Lobby" do
+    test "deletes a spyfall participant when the leave game button is clicked", %{
+      conn: conn,
+      table: table
+    } do
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
+      start_supervised(PresenceServer)
+      Tables.subscribe(table.id)
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live |> element("button", "Join The Game") |> render_click()
+      index_live |> element("button", "Leave The Game") |> render_click()
+
+      assert [] == SpyfallParticipants.list_spyfall_participants()
+    end
+
     test "creates a spyfall participant when the join the game button is clicked", %{
       conn: conn,
       table: table

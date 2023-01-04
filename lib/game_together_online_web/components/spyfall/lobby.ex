@@ -18,6 +18,19 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
     {:noreply, socket}
   end
 
+  def handle_event("remove_user_from_game", _params, socket) do
+    %{table: table, current_player: current_player} = socket.assigns
+    %{spyfall_game: spyfall_game} = table
+
+    SpyfallParticipants.delete_spyfall_participant_by_game_and_player(
+      spyfall_game.id,
+      current_player.id
+    )
+
+    Tables.broadcast(table.id)
+    {:noreply, socket}
+  end
+
   def render(assigns) do
     assigns =
       assigns
@@ -56,6 +69,8 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
             <div class="mt-6">
               <%= if @current_player_has_joined do %>
                 <button
+                  phx-click="remove_user_from_game"
+                  phx-target={@myself}
                   type="button"
                   class="w-full items-center rounded-md border border-transparent bg-indigo-100 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
