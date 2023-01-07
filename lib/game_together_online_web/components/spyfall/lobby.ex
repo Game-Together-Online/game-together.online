@@ -5,11 +5,25 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
   alias GameTogetherOnline.Tables
   alias GameTogetherOnline.SpyfallParticipants
 
+  def handle_event("toggle_ready_to_play", _params, socket) do
+    %{table: table} = socket.assigns
+
+    {:ok, _spyfall_participant} =
+      socket.assigns
+      |> participant_for_current_player()
+      |> SpyfallParticipants.toggle_readiness()
+
+    Tables.broadcast(table.id)
+
+    {:noreply, socket}
+  end
+
   def handle_event("add_user_to_game", _params, socket) do
     %{table: table, current_player: current_player} = socket.assigns
     %{spyfall_game: spyfall_game} = table
 
     SpyfallParticipants.create_spyfall_participant(%{
+      ready_to_start: true,
       spyfall_game_id: spyfall_game.id,
       player_id: current_player.id
     })
@@ -35,6 +49,7 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
     assigns =
       assigns
       |> set_current_player_has_joined()
+      |> set_current_player_ready_to_play()
 
     ~H"""
     <div>
@@ -66,8 +81,25 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
               </div>
             </dl>
 
-            <div class="mt-6">
+            <div class="mt-6 space-y-2">
               <%= if @current_player_has_joined do %>
+                <div class="flex flex-row justify-end">
+                  <div class="flex h-5 items-center">
+                    <input
+                      id="comments"
+                      phx-click="toggle_ready_to_play"
+                      phx-target={@myself}
+                      aria-describedby="comments-description"
+                      name="comments"
+                      type="checkbox"
+                      checked={@current_player_ready_to_play}
+                      class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="comments" class="font-medium text-gray-700">Ready To Start</label>
+                  </div>
+                </div>
                 <button
                   phx-click="remove_user_from_game"
                   phx-target={@myself}
@@ -99,15 +131,29 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
   end
 
   defp set_current_player_has_joined(assigns) do
+    assign(
+      assigns,
+      :current_player_has_joined,
+      participant_for_current_player(assigns) != nil
+    )
+  end
+
+  defp set_current_player_ready_to_play(assigns) do
+    participant = participant_for_current_player(assigns)
+
+    assign(
+      assigns,
+      :current_player_ready_to_play,
+      participant != nil && participant.ready_to_start
+    )
+  end
+
+  defp participant_for_current_player(assigns) do
     %{
       current_player: %{id: current_player_id},
       table: %{spyfall_game: %{spyfall_participants: spyfall_participants}}
     } = assigns
 
-    assign(
-      assigns,
-      :current_player_has_joined,
-      Enum.any?(spyfall_participants, &(&1.player_id == current_player_id))
-    )
+    Enum.find(spyfall_participants, &(&1.player_id == current_player_id))
   end
 end

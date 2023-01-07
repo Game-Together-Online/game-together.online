@@ -16,7 +16,68 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
   setup :create_table
 
   describe "Lobby" do
-    test "deletes a spyfall participant when the leave game button is clicked", %{
+    test "marks players who join as ready to play", %{conn: conn, table: table} do
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
+      start_supervised(PresenceServer)
+      Tables.subscribe(table.id)
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live |> element("button", "Join The Game") |> render_click()
+
+      [spyfall_participant] = SpyfallParticipants.list_spyfall_participants()
+
+      assert spyfall_participant.ready_to_start
+    end
+
+    test "players allows players to mark themselves as not ready to play", %{
+      conn: conn,
+      table: table
+    } do
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
+      current_player = conn.assigns.current_player
+      %{spyfall_game: spyfall_game} = table
+      start_supervised(PresenceServer)
+      Tables.subscribe(table.id)
+
+      SpyfallParticipants.create_spyfall_participant(%{
+        spyfall_game_id: spyfall_game.id,
+        player_id: current_player.id,
+        ready_to_start: true
+      })
+
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live |> element("input") |> render_click()
+      [spyfall_participant] = SpyfallParticipants.list_spyfall_participants()
+
+      refute spyfall_participant.ready_to_start
+    end
+
+    test "players allows players to mark themselves as ready to play", %{
+      conn: conn,
+      table: table
+    } do
+      conn = get(conn, ~p"/tables/#{table.id}/lobby")
+      current_player = conn.assigns.current_player
+      %{spyfall_game: spyfall_game} = table
+      start_supervised(PresenceServer)
+      Tables.subscribe(table.id)
+
+      SpyfallParticipants.create_spyfall_participant(%{
+        spyfall_game_id: spyfall_game.id,
+        player_id: current_player.id,
+        ready_to_start: false
+      })
+
+      {:ok, index_live, _html} = live(conn, ~p"/tables/#{table.id}/lobby")
+
+      index_live |> element("input") |> render_click()
+      [spyfall_participant] = SpyfallParticipants.list_spyfall_participants()
+
+      assert spyfall_participant.ready_to_start
+    end
+
+    test "removes a spyfall participant when the leave game button is clicked", %{
       conn: conn,
       table: table
     } do
