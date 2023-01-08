@@ -1,16 +1,12 @@
 <div class="flex h-full">
   <div class="flex grow flex-col">
-    <div class="p-4 grow">
-      <div class="grow">
-        <.live_component
-          module={lobby_component(@table.game_type.slug)}
-          id={"lobby-" <> @table.id}
-          table={@table}
-          current_player={@current_player}
-          current_tab={@current_tab}
-        />
-      </div>
-    </div>
+    <.live_component
+      module={lobby_component(@table.game_type.slug)}
+      id={"lobby-" <> @table.id}
+      table={@table}
+      current_player={@current_player}
+      current_tab={@current_tab}
+    />
 
     <div class="bg-indigo-600">
       <div class="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
