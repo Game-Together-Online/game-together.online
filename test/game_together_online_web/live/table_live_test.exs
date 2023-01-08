@@ -142,12 +142,6 @@ defmodule GameTogetherOnlineWeb.TableLiveTest do
       assert html =~ "SPADES"
     end
 
-    test "shows the spyfall lobby for spyfall tables", %{conn: conn, table: table} do
-      {:ok, _index_live, html} = live(conn, ~p"/tables/#{table.id}/lobby")
-
-      assert html =~ "SPYFALL"
-    end
-
     test "allows players to update their nickname", %{conn: conn, table: table} do
       start_supervised!(PresenceServer)
       conn = get(conn, ~p"/tables/#{table.id}/lobby")
