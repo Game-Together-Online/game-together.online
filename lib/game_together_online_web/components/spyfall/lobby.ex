@@ -135,28 +135,58 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
                 </p>
               </div>
             <% else %>
-              <ul role="list" class="grow divide-y divide-gray-200 overflow-y-scroll flex-grow h-0">
-                <%= for spyfall_participant <- @table.spyfall_game.spyfall_participants do %>
-                  <li class="flex py-4">
-                    <div class="flex min-w-0 flex-1 items-center space-x-3">
-                      <div class="flex-shrink-0">
-                        <span class="inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                          <svg
-                            class="h-full w-full text-gray-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                          </svg>
-                        </span>
-                      </div>
-                      <p class="truncate text-sm font-medium text-gray-900">
-                        <%= spyfall_participant.player.nickname %>
-                      </p>
+              <div class="px-4 sm:px-6 lg:px-8 h-0 grow overflow-y-scroll">
+                <div class="flex flex-col">
+                  <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                      <table class="min-w-full divide-y divide-gray-300">
+                        <thead>
+                          <tr>
+                            <th class="w-full"></th>
+                            <th
+                              scope="col"
+                              class="whitespace-nowrap py-3.5 px-3 text-left text-sm font-semibold text-gray-900 text-right"
+                            >
+                              Ready To Start?
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                          <%= for spyfall_participant <- @table.spyfall_game.spyfall_participants do %>
+                            <tr>
+                              <td class="whitespace-nowrap py-4 px-3">
+                                <div class="flex min-w-0 flex-1 items-center space-x-3">
+                                  <div class="flex-shrink-0">
+                                    <span class="inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+                                      <svg
+                                        class="h-full w-full text-gray-300"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                      </svg>
+                                    </span>
+                                  </div>
+                                  <p class="truncate text-sm font-medium text-gray-900">
+                                    <%= spyfall_participant.player.nickname %>
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                <Heroicons.check_circle
+                                  :if={spyfall_participant.ready_to_start}
+                                  mini
+                                  class="h-6 w-6 m-auto text-green-500"
+                                />
+                              </td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
                     </div>
-                  </li>
-                <% end %>
-              </ul>
+                  </div>
+                </div>
+              </div>
             <% end %>
           </div>
         </div>
