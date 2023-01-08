@@ -124,210 +124,40 @@ defmodule GameTogetherOnlineWeb.Components.Spyfall.Lobby do
             </div>
           </div>
 
-          <div class="flex flex-col px-4 grow">
-            SPYFALL! <%= @table.id %>
-            <ul role="list" class="grow divide-y divide-gray-200 overflow-y-scroll flex-grow h-0">
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Calvin Hawkins</p>
-                  <p class="text-sm text-gray-500">calvin.hawkins@example.com</p>
-                </div>
-              </li>
-
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Kristen Ramos</p>
-                  <p class="text-sm text-gray-500">kristen.ramos@example.com</p>
-                </div>
-              </li>
-
-              <li class="flex py-4">
-                <img
-                  class="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <div class="ml-3">
-                  <p class="text-sm font-medium text-gray-900">Ted Fox</p>
-                  <p class="text-sm text-gray-500">ted.fox@example.com</p>
-                </div>
-              </li>
-            </ul>
+          <div class="flex flex-col pl-4 grow">
+            <%= if @table.spyfall_game.spyfall_participants == [] do %>
+              <div class="grow flex flex-col items-center justify-center">
+                <h3 class="mt-2 text-sm font-medium text-gray-900">
+                  No Players Have Joined The Game
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                  Be the first by clicking the 'Join The Game' button!
+                </p>
+              </div>
+            <% else %>
+              <ul role="list" class="grow divide-y divide-gray-200 overflow-y-scroll flex-grow h-0">
+                <%= for spyfall_participant <- @table.spyfall_game.spyfall_participants do %>
+                  <li class="flex py-4">
+                    <div class="flex min-w-0 flex-1 items-center space-x-3">
+                      <div class="flex-shrink-0">
+                        <span class="inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+                          <svg
+                            class="h-full w-full text-gray-300"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                          </svg>
+                        </span>
+                      </div>
+                      <p class="truncate text-sm font-medium text-gray-900">
+                        <%= spyfall_participant.player.nickname %>
+                      </p>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
           </div>
         </div>
       </div>

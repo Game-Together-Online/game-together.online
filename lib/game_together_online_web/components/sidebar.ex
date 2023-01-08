@@ -93,7 +93,6 @@ defmodule GameTogetherOnlineWeb.Components.Sidebar do
     """
   end
 
-  # TODO: Test this
   defp nickname_change_chat_event(assigns) do
     ~H"""
     <li>
