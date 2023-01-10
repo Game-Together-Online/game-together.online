@@ -1,7 +1,7 @@
 <div class="flex h-full">
   <div class="flex grow flex-col">
     <.live_component
-      module={lobby_component(@table.game_type.slug)}
+      module={lobby_component(@table)}
       id={"lobby-" <> @table.id}
       table={@table}
       current_player={@current_player}
